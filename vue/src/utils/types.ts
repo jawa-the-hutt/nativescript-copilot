@@ -1,0 +1,55 @@
+
+export type Step = {
+  name: string;
+  text: string;
+  order: number;
+  // visible: boolean;
+  target: any;
+  animated?: boolean;
+  isFirstStep?: boolean;
+  isLastStep?: boolean;
+  verticalOffset?: number,
+};
+
+export type ValueXY = {
+  x: number;
+  y: number;
+};
+
+export type Layout = {
+  width: number;
+  height: number;
+}
+
+export type ArrowPosition = {
+  width: number;
+  height: number;
+  location: string;
+  left: number | string;
+  top: number | string;
+  right: number | string;
+  bottom: number | string;
+}
+
+export type TooltipPosition = {
+  left: number | string;
+  top: number | string;
+  right: number | string;
+  bottom: number | string;
+  middle: number | string;
+  alignment: string;
+}
+
+export type Points = {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+}
+
+export type ViewLocationProperties = {
+  width: number;
+  height: number;
+  left: number;
+  top: number;
+}
