@@ -46,9 +46,9 @@
   "author": "Gary Gambill",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jawa-the-hutt/nativescript-vue-copilot/issues"
+    "url": "https://github.com/jawa-the-hutt/nativescript-copilot/issues"
   },
-  "homepage": "https://github.com/jawa-the-hutt/nativescript-vue-copilot#readme",
+  "homepage": "https://github.com/jawa-the-hutt/nativescript-copilot#readme",
   "dependencies": {
     "nativescript-tweenjs": "^0.9.0",
     "vue-class-component": "^7.1.0",
