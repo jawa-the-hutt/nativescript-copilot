@@ -17,7 +17,7 @@
           <StackLayout row="0" verticalAlignment="middle" horizontalAlignment="center" height="50%" width="50%">
             <Image ref="step4" src="~/assets/logo.png"  borderWidth="0"/>
           </StackLayout> 
-          <StackLayout row="1" ref="step5" class="startButton" verticalAlignment="top" marginRight="15" horizontalAlignment="right" @tap="startTour()">
+          <StackLayout row="1" ref="step5" class="startButton" verticalAlignment="top" marginRight="15" horizontalAlignment="center" @tap="startTour()">
             <Label text="START THE TUTORIAL!" color="white" verticalAlignment="middle" horizontalAlignment="center"/>
           </StackLayout>
           <StackLayout row="2" class="startButton" verticalAlignment="top" horizontalAlignment="center" @tap="goTo()">
