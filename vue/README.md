@@ -84,6 +84,8 @@ There are several configuration items in a `Step` object:
 | verticalOffset | number        | Use in case you need to vertically offset the area highlighted by the step.  This can be a positive or negative number   |
 | isFirstStep    | boolean       | Used to tell the plugin which step is first so that it will hide the `Previous` button   |
 | isLastStep     | boolean       | Used to tell the plugin which step is last so that it will hide the `Next` button and show the 'Finish' button    |
+| isLastStep     | boolean       | Used to tell the plugin which step is last so that it will hide the `Next` button and show the 'Finish' button    |
+| darkenWholePage| boolean       | Used to tell the plugin if a step has no highlighted value, to darken the whole screen, and center the text box vertically and horizontally    |
 
 You will then pass the step config into the `Copilot` component as the `steps` prop.  In the example below, we are using a computed property to feed the `steps` prop:
 
@@ -103,8 +105,8 @@ You will then pass the step config into the `Copilot` component as the `steps` p
 There are several other props that can be passed into the `Copilot` component.  They are:
 | Name              | Type   | Default    | Description    |
 | ----------------- | -------| -----------| -----------|
-| animationDuration | string | 300        | Number of `ms` the animation will take to move to the next step | 
-| labels            | object | { skip: 'Skip', next: 'Next', previous: 'Previous', finish: 'Finish' } | The names of the four buttons used in the toolsip to move between tour steps.  `Skip` will end the tour at any step, while `Finish` will only end at the very last step. |
+| animationDuration | string | 300        | Number of `ms` the animation will take to move to the next step |
+| labels            | object | { skip: 'Skip', next: 'Next', previous: 'Previous', finish: 'Finish' } | The names of the four buttons used in the toolsip to move between tour steps.  `Skip` will end the tour at any step while `Finish` will only end at the very last step. |
 | tooltipStyle      | object | { fontFamily: Avenir-Light, tooltipFontSize: 14, tooltipTextColor: 'black', buttonFontSize: 14, accentColor: 'green' }        | Used to control the overall apperance of the tooltip |
 | overlayColor      | string | rgb(0, 0, 0, 0.4)           | Used to control the overlay color           |
 | backgroundColor   | string | white      | Used to set the primary background color of the tooltip           |
@@ -132,6 +134,26 @@ private tooltipStyle: object = {
 private overlayColor: string = 'rgba(0, 0, 0, 0.4)';
 private accentColor: string = 'green';
 private backgroundColor: string = 'white';
+```
+
+There are several events emitted by the `Copilot` component:
+
+| Name           | Type          | Description    |
+| -------------- | --------------| --------------- |
+| stepChange     | object            | Emitted when a step progresses forward or backward, emits an object containing stepLeaving and stepArriving    |
+| copilotStopped | --            | Emitted when the copilot is stopped   |
+| notReady       | --            | Emitted when the copilot receives an invalid layout |
+
+You will call the event from the `Copilot` component as the name of the chosen event.  In the example below, we are calling a function on the event:
+
+```html
+  <Copilot
+    :steps="computedSteps"
+    @stepChange="stepChanged"
+    @copilotStopped="copilotStopped"
+    @notReady="copilotNotReady"
+    ref="copilot"
+  />
 ```
 
 To start a tour on a particular page you will need to call the `Copilot` start function.  An example of this is: `this.$refs.copilot.start();`

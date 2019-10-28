@@ -8,7 +8,8 @@ export type Step = {
   animated?: boolean;
   isFirstStep?: boolean;
   isLastStep?: boolean;
-  verticalOffset?: number,
+  darkenWholePage?: boolean;
+  verticalOffset?: number;
 };
 
 export type ValueXY = {

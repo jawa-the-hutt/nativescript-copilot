@@ -2,7 +2,7 @@
   <Page ref="wholePage" actionBarHidden="true" backgroundColor="white"  @loaded="copilotLoaded()">
     <Gridlayout rows="*" columns="*">
       <GridLayout row="0" rows="50, *, 50">
-        <GridLayout row="0" columns="*, *, *" backgroundColor="#2980b9">
+        <GridLayout row="0" columns="*, *, *" backgroundColor="#8229b9">
           <StackLayout col="0" verticalAlignment="middle" horizontalAlignment="left">
             <Label ref="step1" text="Top Left" textWrap="true" marginLeft="15" verticalAlignment="middle" horizontalAlignment="left" color="white" borderWidth="0"/>
           </StackLayout>
@@ -17,16 +17,16 @@
           <StackLayout row="0" verticalAlignment="middle" horizontalAlignment="center" height="50%" width="50%">
             <Image ref="step4" src="~/assets/logo.png"  borderWidth="0"/>
           </StackLayout> 
-          <StackLayout row="1" ref="step5" class="startButton" verticalAlignment="top" horizontalAlignment="center" @tap="startTour()">
+          <StackLayout row="1" ref="step5" class="startButton" verticalAlignment="top" marginRight="15" horizontalAlignment="right" @tap="startTour()">
             <Label text="START THE TUTORIAL!" color="white" verticalAlignment="middle" horizontalAlignment="center"/>
           </StackLayout>
           <StackLayout row="2" class="startButton" verticalAlignment="top" horizontalAlignment="center" @tap="goTo()">
-            <Label text="Navigate to Testing Page" color="white" verticalAlignment="middle" horizontalAlignment="center"/>
+            <Label text="Navigate Back" color="white" verticalAlignment="middle" horizontalAlignment="center"/>
           </StackLayout>
         </GridLayout>
-        <GridLayout row="2" columns="*, *, *" backgroundColor="#2980b9">
+        <GridLayout row="2" columns="*, *, *" backgroundColor="#8229b9">
           <StackLayout col="0" verticalAlignment="middle" horizontalAlignment="left">
-            <Label ref="step6" text="Bottom Left" textWrap="true"  marginLeft="15" verticalAlignment="middle" horizontalAlignment="left" color="white" borderWidth="0"/>
+            <Label ref="step6" text="Bottom Left" textWrap="true"  marginLeft="15" verticalAlignment="middle" horizontalAlignment="right" color="white" borderWidth="0"/>
           </StackLayout>
           <StackLayout col="1" verticalAlignment="middle" horitzontalAlignment="center">
             <Image ref="step7" src="~/assets/logo.png" height="50%" width="50%" borderWidth="0"/>
@@ -37,7 +37,8 @@
         </GridLayout>
       </GridLayout> 
       <Copilot
-        v-if="computedSteps.length > 0"
+        :key="computedReset"
+        @notReady="resetCopilot"
         :steps="computedSteps"
         :animationDuration="animationDuration"
         :labels="labels"
@@ -53,15 +54,17 @@
 </template>
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator';
-  import TestingPageTwo from './tesing-page-two.vue';
+  import App from './App.vue';
   import { Step } from '../../';
 
   @Component({
   })
-  export default class App extends Vue {
+  export default class TestingPageTwo extends Vue {
     private steps: Step[] = [];
     private animationDuration: number = 300;
     private androidStatusBarVisible: boolean = false;
+    // used to try and reset the app tour onload, not working properly
+    private reset: boolean = false;
     private labels: object = {
       skip: 'Skip',
       previous: 'Previous',
@@ -84,18 +87,26 @@
     // private easing!: Function;
 
     private startTour() {
+      // console.log('Starting tour');
       // @ts-ignore
+      
       this.$refs.copilot.start(); 
     }
 
-    private testClick() {
-      // used to assure that you could not click behind the app tour on android
-      // console.log('The test android click button was clicked.');
+    private resetCopilot() {
+      // console.log('Reseting copilot');
+      // used to try and reset the app tour onload, not working properly
+      this.reset = !this.reset;
+
+    }
+
+    get computedReset(): boolean {
+      return this.reset;
     }
 
     private goTo() {
       //@ts-ignore
-      this.$navigateTo(TestingPageTwo);
+      this.$navigateTo(App);
     }
 
     private copilotLoaded() {
@@ -136,7 +147,7 @@
         },
         {
           name: 'Fifth',
-          text: 'This has a veritcal offset of -5 which will push the step 5dp towards the top',
+          text: 'This has a veritcal offset of -5 which will push the step 5dp towards e text that should hopefully be long enough',
           order: 5,
           // @ts-ignore
           target: this.$refs.step5.nativeView,
@@ -177,9 +188,15 @@
           darkenWholePage: true,
         }
       ]
+
+      // calling the startTour function on load causes a slight break in UI, this is because the ref is not ready at this point in time
+      // for now, the app tour will not run, and instead emit 'notReady' event
+      this.startTour();
     }
 
     get computedSteps() {
+      //used to try and reset the ref's
+      let reset = this.computedReset;
       return this.steps;
     }
 
@@ -190,7 +207,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
   .startButton {
-    background-color: #2980b9;
+    background-color: #8229b9;
     padding-top: 10;
     padding-bottom: 10;
     padding-left: 6;
