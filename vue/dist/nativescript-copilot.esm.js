@@ -709,6 +709,42 @@ let CopilotModal = class CopilotModal extends Vue {
             target: '',
             animated: true
         };
+        this.arrow = {
+            width: 0,
+            height: 0,
+            left: 0,
+            top: 0,
+            right: 0,
+            bottom: 0,
+            location: ''
+        };
+        this.loaded = false;
+        this.tooltip = {
+            left: 0,
+            top: 0,
+            right: 0,
+            bottom: 0,
+            middle: '*',
+            alignment: 'left'
+        };
+        this.layout = {
+            width: 0,
+            height: 0
+        };
+        this.stepNumberPosition = {
+            left: 0,
+            top: 0,
+            right: 0,
+            bottom: 0
+        };
+        this.size = {
+            x: 0,
+            y: 0
+        };
+        this.position = {
+            x: 0,
+            y: 0
+        };
     }
     get computedCopilotVisible() {
         return this.copilotVisible;
