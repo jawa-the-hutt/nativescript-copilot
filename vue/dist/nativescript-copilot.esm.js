@@ -550,7 +550,6 @@ let CopilotModal = class CopilotModal extends Vue {
         this.loaded = false;
     }
     onLoaded() {
-        console.log('Copilot loaded');
         if (isAndroid) {
             this.getDeviceInfoAndroid();
         }
@@ -604,8 +603,6 @@ let CopilotModal = class CopilotModal extends Vue {
         let arrowClipPath = '';
         let dim = view.getActualSize();
         let pos = view.getLocationInWindow();
-        console.log('obj - dim ', dim);
-        console.log('obj - - pos ', pos);
         if (darkenWholePage) {
             dim = {
                 width: 0,
@@ -688,20 +685,23 @@ let CopilotModal = class CopilotModal extends Vue {
             }
         }
         else {
-            this.$emit('ready');
+            this.$emit('notReady');
         }
     }
     next() {
         this.stepCount = this.stepCount === this.steps.length - 1 ? 0 : this.stepCount + 1;
         this.currentStep = this.steps[this.stepCount];
+        this.$emit('stepChange', { stepLeaving: this.steps[this.stepCount - 1], stepArriving: this.steps[this.stepCount] });
     }
     prev() {
         this.stepCount = this.stepCount === 0 ? this.steps.length - 1 : this.stepCount - 1;
         this.currentStep = this.steps[this.stepCount];
+        this.$emit('stepChange', { stepLeaving: this.steps[this.stepCount + 1], stepArriving: this.steps[this.stepCount] });
     }
     stop() {
         this.copilotVisible = false;
         this.stepCount = 0;
+        this.$emit('copilotStopped');
         this.currentStep = {
             name: 'First',
             text: 'here is some text',
@@ -711,7 +711,6 @@ let CopilotModal = class CopilotModal extends Vue {
         };
     }
     get computedCopilotVisible() {
-        console.log('This is the computedCopilotVisible');
         return this.copilotVisible;
     }
     get computedCurrentStep() {
