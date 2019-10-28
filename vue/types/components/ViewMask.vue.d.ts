@@ -14,4 +14,5 @@ export default class ViewMask extends Vue {
     setupAnimation(animationDuration: any, position?: any, size?: any): void;
     readonly computedHighlightBox: object;
     private animate;
+    private absorbTap;
 }

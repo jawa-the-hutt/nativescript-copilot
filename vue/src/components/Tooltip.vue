@@ -3,13 +3,16 @@
     <Gridlayout :rows="computedTopGridRows" 
       :columns="`${computedTooltip.middle}`"  :horizontalAlignment="computedTooltip.alignment"
       backgroundColor="rgba(0,0,0,0)" :key="computedTooltip.middle">
-      <Gridlayout :row="`${computedArrow.location === 'top' ? '1' : '2'}`" col="0" 
+      <!-- Arrow XML -->
+      <Gridlayout v-show="!currentStep.darkenWholePage" :row="`${computedArrow.location === 'top' ? '1' : '2'}`" col="0" 
         :rows="`${computedArrow.height}`" 
         :columns="`${computedArrow.width}`"  
         :marginLeft="computedArrow.left" :marginRight="computedArrow.right"
         :horizontalAlignment="computedTooltip.alignment">
         <Label :width="computedArrow.width" :height="computedArrow.height" :style="computedArrowStyle" :backgroundColor="backgroundColor" />
       </Gridlayout>
+      <!-- End of Arrow XML -->
+      <!-- Tool Tipbox XML -->
       <Gridlayout ref="grid" :row="`${computedArrow.location === 'top' ? '2' : '1'}`" col="0" rows="auto, auto" :columns="`${computedTooltip.middle}`" 
         :marginLeft="computedTooltip.left" :marginRight="computedTooltip.right"
         @layoutChanged="gridLoaded()" :key="computedTooltip.middle" 
@@ -31,6 +34,7 @@
           </StackLayout>      
         </Gridlayout>
       </Gridlayout>
+      <!-- End of Tool Tipbox XML -->
     </Gridlayout>
   </StackLayout>
 
@@ -55,7 +59,7 @@
     @Prop({ default: 13}) public tooltipMargin!: number;
     @Prop() public arrowClipPath!: string; 
     @Prop() public arrow!: ArrowPosition; 
-    @Prop({ default: 'white' }) public backgroundColor!: string; 
+    @Prop({ default: 'white' }) public backgroundColor!: string;
 
     // this function solves an issue with the grid not auto-sizing a column correctly if the contents of the column 
     // are larger than the width of the screen.  In the event this happens, we change the column to '*' so that
@@ -69,6 +73,15 @@
         const tooltip: TooltipPosition = {...this.tooltipPosition};
         tooltip.left = this.tooltipMargin;
         tooltip.right = this.tooltipMargin;
+        tooltip.middle = '*';
+
+        this.tooltipPosition = tooltip;
+      }
+
+      if (this.currentStep.darkenWholePage && this.currentStep.darkenWholePage === true) {
+        const tooltip: TooltipPosition = {...this.tooltipPosition};
+        tooltip.left = 'auto';
+        tooltip.right = 'auto';
         tooltip.middle = '*';
 
         this.tooltipPosition = tooltip;

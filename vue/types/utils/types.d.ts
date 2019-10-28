@@ -6,6 +6,7 @@ export declare type Step = {
     animated?: boolean;
     isFirstStep?: boolean;
     isLastStep?: boolean;
+    darkenWholePage?: boolean;
     verticalOffset?: number;
 };
 export declare type ValueXY = {
