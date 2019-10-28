@@ -109,7 +109,6 @@
       x: 0,
       y: 0
     };
-
     private margin = MARGIN;
     private screenScale!: number;
 
@@ -150,6 +149,7 @@
     // @Prop() public easing!: Function;
 
     private onLoaded(): void {
+      // console.log('Copilot loaded');
       if (platform.isAndroid) {
         this.getDeviceInfoAndroid();
       } else {
@@ -177,7 +177,9 @@
       }
       this.safeArea = safeArea;
       this.loaded = true;
-      this.currentStep = this.steps[0];
+
+
+      this.currentStep = this.computedSteps[0];
 
     }
 
@@ -204,7 +206,7 @@
       this.screenScale = screen.scale;
     }
 
-    private async animateMove(view: any, verticalOffset: number): Promise<void> {
+    private async animateMove(view: any, verticalOffset: number, darkenWholePage: boolean): Promise<void> {
       // console.log('staring animateMove')
       
       const layout = {...this.layout};
@@ -213,11 +215,22 @@
       const arrow: ArrowPosition =  {...this.arrow};
       let arrowClipPath: string =  '';
 
-      const dim = view.getActualSize();
-      const pos = view.getLocationInWindow();
+      let dim = view.getActualSize();
+      let pos = view.getLocationInWindow();
 
       // console.log('obj - dim ', dim)
       // console.log('obj - - pos ', pos)
+
+      if (darkenWholePage) {
+        dim = {
+          width: 0,
+          height: 0
+        }
+        pos = {
+          x: this.computedLayout.width/2,
+          y: this.computedLayout.height/2
+        }
+      }
 
       const obj: ViewLocationProperties = {
         width: dim.width + OFFSET_WIDTH,
@@ -305,39 +318,73 @@
 
     }
 
+    public onUnloaded() {
+      this.stop();
+    }
+
     public start(): void {
-      this.copilotVisible = true;
+      if (this.computedSteps && this.computedSteps[0]) {
+        const step = this.computedSteps[0];
+        if (step.target && step.target.isLoaded && step.target.isLayoutValid) {
+          this.copilotVisible = true;
+        }
+      } else {
+        //notReady is emitted if the given layout is not valid or loaded in, copilot will not start
+        //@ts-ignore
+        this.$emit('notReady');
+      }
     }
 
     private next(): void {
       this.stepCount = this.stepCount === this.steps.length - 1 ? 0 : this.stepCount + 1;
       this.currentStep = this.steps[this.stepCount];
+      //@ts-ignore
+      this.$emit('stepChange', {stepLeaving: this.steps[this.stepCount - 1], stepArriving: this.steps[this.stepCount]});
     }
 
     private prev(): void {
       this.stepCount = this.stepCount ===  0 ? this.steps.length - 1 : this.stepCount - 1;
       this.currentStep = this.steps[this.stepCount];
+      //@ts-ignore
+      this.$emit('stepChange', {stepLeaving: this.steps[this.stepCount + 1], stepArriving: this.steps[this.stepCount]});
     }
 
     private stop(): void {
       this.copilotVisible = false;
       this.stepCount = 0;
+      //@ts-ignore
+      this.$emit('copilotStopped');
+      this.currentStep = {
+      name: 'First',
+      text: 'here is some text',
+      order: 1,
+      target: '',
+      animated: true
+      };
     }
 
     get computedCopilotVisible(): boolean {
+      // console.log('This is the computedCopilotVisible');
       return this.copilotVisible;
     }
 
     get computedCurrentStep(): Step {
       const verticalOffset = this.currentStep.verticalOffset === undefined ? 0 : this.currentStep.verticalOffset
       if(this.currentStep.target && this.loaded) {
-        this.animateMove(this.currentStep.target, verticalOffset); 
+        if (!this.currentStep.darkenWholePage) {
+          this.currentStep.darkenWholePage = false;
+        }
+        this.animateMove(this.currentStep.target, verticalOffset, this.currentStep.darkenWholePage); 
       }
       return this.currentStep;
     }
 
     get computedSize(): ValueXY {
       return this.size;
+    }
+
+    get computedSteps(): Step[] {
+      return this.steps;
     }
 
     get computedPosition(): ValueXY {
@@ -367,6 +414,7 @@
     get computedSafeArea(): Points {
       return this.safeArea;
     }
+
 
   }
 

@@ -67,6 +67,8 @@ function __decorate(decorators, target, key, desc) {
                 .start();
         }
     }
+    absorbTap() {
+    }
 };
 __decorate([
     vuePropertyDecorator.Prop()
@@ -187,13 +189,13 @@ var normalizeComponent_1 = normalizeComponent;/* script */
 const __vue_script__ = script;
 
 /* template */
-var __vue_render__ = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('ContentView',{style:(_vm.computedHighlightBox),on:{"loaded":function($event){return _vm.setupAnimation(1)}}})};
+var __vue_render__ = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('ContentView',{style:(_vm.computedHighlightBox),on:{"tap":function($event){return _vm.absorbTap()},"loaded":function($event){return _vm.setupAnimation(1)}}})};
 var __vue_staticRenderFns__ = [];
 
   /* style */
   const __vue_inject_styles__ = undefined;
   /* scoped */
-  const __vue_scope_id__ = "data-v-5f3b69ad";
+  const __vue_scope_id__ = "data-v-2782283c";
   /* module identifier */
   const __vue_module_identifier__ = undefined;
   /* functional template */
@@ -221,6 +223,13 @@ var __vue_staticRenderFns__ = [];
             const tooltip = { ...this.tooltipPosition };
             tooltip.left = this.tooltipMargin;
             tooltip.right = this.tooltipMargin;
+            tooltip.middle = '*';
+            this.tooltipPosition = tooltip;
+        }
+        if (this.currentStep.darkenWholePage && this.currentStep.darkenWholePage === true) {
+            const tooltip = { ...this.tooltipPosition };
+            tooltip.left = 'auto';
+            tooltip.right = 'auto';
             tooltip.middle = '*';
             this.tooltipPosition = tooltip;
         }
@@ -295,13 +304,13 @@ var script$1 = Tooltip;/* script */
 const __vue_script__$1 = script$1;
 
 /* template */
-var __vue_render__$1 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('StackLayout',{attrs:{"marginLeft":_vm.tooltipMargin,"marginRight":_vm.tooltipMargin}},[_c('Gridlayout',{key:_vm.computedTooltip.middle,attrs:{"rows":_vm.computedTopGridRows,"columns":("" + (_vm.computedTooltip.middle)),"horizontalAlignment":_vm.computedTooltip.alignment,"backgroundColor":"rgba(0,0,0,0)"}},[_c('Gridlayout',{attrs:{"row":("" + (_vm.computedArrow.location === 'top' ? '1' : '2')),"col":"0","rows":("" + (_vm.computedArrow.height)),"columns":("" + (_vm.computedArrow.width)),"marginLeft":_vm.computedArrow.left,"marginRight":_vm.computedArrow.right,"horizontalAlignment":_vm.computedTooltip.alignment}},[_c('Label',{style:(_vm.computedArrowStyle),attrs:{"width":_vm.computedArrow.width,"height":_vm.computedArrow.height,"backgroundColor":_vm.backgroundColor}})],1),_vm._v(" "),_c('Gridlayout',{key:_vm.computedTooltip.middle,ref:"grid",attrs:{"row":("" + (_vm.computedArrow.location === 'top' ? '2' : '1')),"col":"0","rows":"auto, auto","columns":("" + (_vm.computedTooltip.middle)),"marginLeft":_vm.computedTooltip.left,"marginRight":_vm.computedTooltip.right,"backgroundColor":_vm.backgroundColor,"paddingTop":"15","paddingLeft":"15","paddingRight":"15","paddingBottom":"5","borderRadius":"3"},on:{"layoutChanged":function($event){return _vm.gridLoaded()}}},[_c('Label',{attrs:{"row":"0","col":"0","text":_vm.currentStep.text,"textWrap":"true","fontSize":_vm.computedTooltipStyle.tooltipFontSize,"color":_vm.computedTooltipStyle.tooltipTextColor,"fontFamily":_vm.computedTooltipStyle.fontFamily}}),_vm._v(" "),_c('GridLayout',{attrs:{"row":"1","col":"0","rows":"*","columns":"auto, auto, auto","marginTop":"10","horizontalAlignment":"right"}},[(!_vm.currentStep.isLastStep)?_c('StackLayout',{attrs:{"col":"0","marginLeft":"7","marginRight":"7"},on:{"tap":function($event){return _vm.handleStop()}}},[_c('Label',{attrs:{"text":_vm.labels.skip || 'Skip',"fontSize":_vm.computedTooltipStyle.buttonFontSize,"color":_vm.computedTooltipStyle.accentColor,"fontFamily":_vm.computedTooltipStyle.fontFamily}})],1):_vm._e(),_vm._v(" "),(!_vm.currentStep.isFirstStep)?_c('StackLayout',{attrs:{"col":"1","marginLeft":"7","marginRight":"7"},on:{"tap":function($event){return _vm.handlePrev()}}},[_c('Label',{attrs:{"text":_vm.labels.previous || 'Previous',"fontSize":_vm.computedTooltipStyle.buttonFontSize,"color":_vm.computedTooltipStyle.accentColor,"fontFamily":_vm.computedTooltipStyle.fontFamily}})],1):_vm._e(),_vm._v(" "),(!_vm.currentStep.isLastStep)?_c('StackLayout',{attrs:{"col":"2","marginLeft":"7","marginRight":"7"},on:{"tap":function($event){return _vm.handleNext()}}},[_c('Label',{attrs:{"text":_vm.labels.next || 'Next',"fontSize":_vm.computedTooltipStyle.buttonFontSize,"color":_vm.computedTooltipStyle.accentColor,"fontFamily":_vm.computedTooltipStyle.fontFamily}})],1):_vm._e(),_vm._v(" "),(_vm.currentStep.isLastStep)?_c('StackLayout',{attrs:{"col":"2","marginLeft":"7","marginRight":"7"},on:{"tap":function($event){return _vm.handleStop()}}},[_c('Label',{attrs:{"text":_vm.labels.finish || 'Finish',"fontSize":_vm.computedTooltipStyle.buttonFontSize,"color":_vm.computedTooltipStyle.accentColor,"fontFamily":_vm.computedTooltipStyle.fontFamily}})],1):_vm._e()],1)],1)],1)],1)};
+var __vue_render__$1 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('StackLayout',{attrs:{"marginLeft":_vm.tooltipMargin,"marginRight":_vm.tooltipMargin}},[_c('Gridlayout',{key:_vm.computedTooltip.middle,attrs:{"rows":_vm.computedTopGridRows,"columns":("" + (_vm.computedTooltip.middle)),"horizontalAlignment":_vm.computedTooltip.alignment,"backgroundColor":"rgba(0,0,0,0)"}},[_c('Gridlayout',{directives:[{name:"show",rawName:"v-show",value:(!_vm.currentStep.darkenWholePage),expression:"!currentStep.darkenWholePage"}],attrs:{"row":("" + (_vm.computedArrow.location === 'top' ? '1' : '2')),"col":"0","rows":("" + (_vm.computedArrow.height)),"columns":("" + (_vm.computedArrow.width)),"marginLeft":_vm.computedArrow.left,"marginRight":_vm.computedArrow.right,"horizontalAlignment":_vm.computedTooltip.alignment}},[_c('Label',{style:(_vm.computedArrowStyle),attrs:{"width":_vm.computedArrow.width,"height":_vm.computedArrow.height,"backgroundColor":_vm.backgroundColor}})],1),_vm._v(" "),_c('Gridlayout',{key:_vm.computedTooltip.middle,ref:"grid",attrs:{"row":("" + (_vm.computedArrow.location === 'top' ? '2' : '1')),"col":"0","rows":"auto, auto","columns":("" + (_vm.computedTooltip.middle)),"marginLeft":_vm.computedTooltip.left,"marginRight":_vm.computedTooltip.right,"backgroundColor":_vm.backgroundColor,"paddingTop":"15","paddingLeft":"15","paddingRight":"15","paddingBottom":"5","borderRadius":"3"},on:{"layoutChanged":function($event){return _vm.gridLoaded()}}},[_c('Label',{attrs:{"row":"0","col":"0","text":_vm.currentStep.text,"textWrap":"true","fontSize":_vm.computedTooltipStyle.tooltipFontSize,"color":_vm.computedTooltipStyle.tooltipTextColor,"fontFamily":_vm.computedTooltipStyle.fontFamily}}),_vm._v(" "),_c('GridLayout',{attrs:{"row":"1","col":"0","rows":"*","columns":"auto, auto, auto","marginTop":"10","horizontalAlignment":"right"}},[(!_vm.currentStep.isLastStep)?_c('StackLayout',{attrs:{"col":"0","marginLeft":"7","marginRight":"7"},on:{"tap":function($event){return _vm.handleStop()}}},[_c('Label',{attrs:{"text":_vm.labels.skip || 'Skip',"fontSize":_vm.computedTooltipStyle.buttonFontSize,"color":_vm.computedTooltipStyle.accentColor,"fontFamily":_vm.computedTooltipStyle.fontFamily}})],1):_vm._e(),_vm._v(" "),(!_vm.currentStep.isFirstStep)?_c('StackLayout',{attrs:{"col":"1","marginLeft":"7","marginRight":"7"},on:{"tap":function($event){return _vm.handlePrev()}}},[_c('Label',{attrs:{"text":_vm.labels.previous || 'Previous',"fontSize":_vm.computedTooltipStyle.buttonFontSize,"color":_vm.computedTooltipStyle.accentColor,"fontFamily":_vm.computedTooltipStyle.fontFamily}})],1):_vm._e(),_vm._v(" "),(!_vm.currentStep.isLastStep)?_c('StackLayout',{attrs:{"col":"2","marginLeft":"7","marginRight":"7"},on:{"tap":function($event){return _vm.handleNext()}}},[_c('Label',{attrs:{"text":_vm.labels.next || 'Next',"fontSize":_vm.computedTooltipStyle.buttonFontSize,"color":_vm.computedTooltipStyle.accentColor,"fontFamily":_vm.computedTooltipStyle.fontFamily}})],1):_vm._e(),_vm._v(" "),(_vm.currentStep.isLastStep)?_c('StackLayout',{attrs:{"col":"2","marginLeft":"7","marginRight":"7"},on:{"tap":function($event){return _vm.handleStop()}}},[_c('Label',{attrs:{"text":_vm.labels.finish || 'Finish',"fontSize":_vm.computedTooltipStyle.buttonFontSize,"color":_vm.computedTooltipStyle.accentColor,"fontFamily":_vm.computedTooltipStyle.fontFamily}})],1):_vm._e()],1)],1)],1)],1)};
 var __vue_staticRenderFns__$1 = [];
 
   /* style */
   const __vue_inject_styles__$1 = undefined;
   /* scoped */
-  const __vue_scope_id__$1 = "data-v-3867b4df";
+  const __vue_scope_id__$1 = "data-v-b1ab5ab0";
   /* module identifier */
   const __vue_module_identifier__$1 = undefined;
   /* functional template */
@@ -518,6 +527,7 @@ var __vue_staticRenderFns__$2 = [];
         this.loaded = false;
     }
     onLoaded() {
+        console.log('Copilot loaded');
         if (platform.isAndroid) {
             this.getDeviceInfoAndroid();
         }
@@ -544,7 +554,7 @@ var __vue_staticRenderFns__$2 = [];
         }
         this.safeArea = safeArea;
         this.loaded = true;
-        this.currentStep = this.steps[0];
+        this.currentStep = this.computedSteps[0];
     }
     getDeviceInfoAndroid() {
         const metrics = app.android.context.getResources().getDisplayMetrics();
@@ -563,14 +573,26 @@ var __vue_staticRenderFns__$2 = [];
         };
         this.screenScale = screen.scale;
     }
-    async animateMove(view, verticalOffset) {
+    async animateMove(view, verticalOffset, darkenWholePage) {
         const layout = { ...this.layout };
         const tooltip = { ...this.tooltip };
         const tooltipStyle = { ...this.tooltipStyle };
         const arrow = { ...this.arrow };
         let arrowClipPath = '';
-        const dim = view.getActualSize();
-        const pos = view.getLocationInWindow();
+        let dim = view.getActualSize();
+        let pos = view.getLocationInWindow();
+        console.log('obj - dim ', dim);
+        console.log('obj - - pos ', pos);
+        if (darkenWholePage) {
+            dim = {
+                width: 0,
+                height: 0
+            };
+            pos = {
+                x: this.computedLayout.width / 2,
+                y: this.computedLayout.height / 2
+            };
+        }
         const obj = {
             width: dim.width + OFFSET_WIDTH,
             height: dim.height + OFFSET_WIDTH,
@@ -632,8 +654,19 @@ var __vue_staticRenderFns__$2 = [];
             y: (Math.max(obj.top, 0)),
         };
     }
+    onUnloaded() {
+        this.stop();
+    }
     start() {
-        this.copilotVisible = true;
+        if (this.computedSteps && this.computedSteps[0]) {
+            const step = this.computedSteps[0];
+            if (step.target && step.target.isLoaded && step.target.isLayoutValid) {
+                this.copilotVisible = true;
+            }
+        }
+        else {
+            this.$emit('ready');
+        }
     }
     next() {
         this.stepCount = this.stepCount === this.steps.length - 1 ? 0 : this.stepCount + 1;
@@ -646,19 +679,33 @@ var __vue_staticRenderFns__$2 = [];
     stop() {
         this.copilotVisible = false;
         this.stepCount = 0;
+        this.currentStep = {
+            name: 'First',
+            text: 'here is some text',
+            order: 1,
+            target: '',
+            animated: true
+        };
     }
     get computedCopilotVisible() {
+        console.log('This is the computedCopilotVisible');
         return this.copilotVisible;
     }
     get computedCurrentStep() {
         const verticalOffset = this.currentStep.verticalOffset === undefined ? 0 : this.currentStep.verticalOffset;
         if (this.currentStep.target && this.loaded) {
-            this.animateMove(this.currentStep.target, verticalOffset);
+            if (!this.currentStep.darkenWholePage) {
+                this.currentStep.darkenWholePage = false;
+            }
+            this.animateMove(this.currentStep.target, verticalOffset, this.currentStep.darkenWholePage);
         }
         return this.currentStep;
     }
     get computedSize() {
         return this.size;
+    }
+    get computedSteps() {
+        return this.steps;
     }
     get computedPosition() {
         return this.position;

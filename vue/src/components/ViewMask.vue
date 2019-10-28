@@ -1,5 +1,6 @@
 <template>
   <ContentView 
+    @tap="absorbTap()"
     :style="computedHighlightBox" 
     @loaded="setupAnimation(1)"
   />
@@ -84,6 +85,11 @@
           .to(to, 1)
           .start();
       }
+    }
+
+    // absorb tap allows the mask to not be able to be clicked through on android
+    private absorbTap() {
+      // console.log('This tap was absorbed by the ViewMask');
     }
   }
 

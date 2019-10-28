@@ -29,6 +29,7 @@ export default class CopilotModal extends Vue {
     private getDeviceInfoAndroid;
     private getDeviceInfoIOS;
     private animateMove;
+    onUnloaded(): void;
     start(): void;
     private next;
     private prev;
@@ -36,6 +37,7 @@ export default class CopilotModal extends Vue {
     readonly computedCopilotVisible: boolean;
     readonly computedCurrentStep: Step;
     readonly computedSize: ValueXY;
+    readonly computedSteps: Step[];
     readonly computedPosition: ValueXY;
     readonly computedLayout: Layout;
     readonly computedTooltip: TooltipPosition;
