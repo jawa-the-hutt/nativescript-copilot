@@ -6,29 +6,33 @@
       :position="computedPosition"
       :layout="computedLayout"
       :easing="easing"
+      :wholePage="computedCurrentStep.wholePage"
       :animationDuration="animationDuration"
       :overlayColor="overlayColor"
     />
     <StepNumber row="0" height="100%"
+      v-show="computedShowNumber"
       :animated="computedCurrentStep.animated"
       :size="computedSize"
       :position="computedPosition"
       :layout="computedLayout"
       :easing="easing"
       :animationDuration="`100`"
-      :accentColor="accentColor"
-      :backgroundColor="backgroundColor"
+      :accentColor="computedNumberAccentColor"
+      :backgroundColor="computedNumberBackgroundColor"
       :stepNumber="computedCurrentStep.order"
       :stepNumberPosition="computedStepNumberPosition"
       :safeArea="computedSafeArea"
     />
-    <Tooltip row="0" ref="tooltip" 
+    <Tooltip row="0" ref="tooltip"
+      :backgroundColor="toolTipBackgroundColor"
+      :toolTipBorderRadius="toolTipBorderRadius"
       :currentStep="computedCurrentStep"
       :handleNext="next"
       :handlePrev="prev"
       :handleStop="stop"
-      :labels="labels"
-      :tooltipStyle="tooltipStyle"
+      :labels="computedLabels"
+      :tooltipStyle="computedTooltipStyle"
       :tooltipPosition="computedTooltip"
       :layout="computedLayout"
       :tooltipMargin="margin"
@@ -131,7 +135,7 @@
       tooltipFontSize: 14,
       tooltipTextColor: 'black',
       buttonFontSize: 14,
-      accentColor: 'green'
+      accentColor: 'green',
     }}) public tooltipStyle!: object;  
     @Prop({ default: false }) public androidStatusBarVisible!: boolean;
     @Prop({ default: 'rgba(0, 0, 0, 0.4)'}) public overlayColor!: string;
@@ -141,15 +145,18 @@
       next: 'Next',
       finish: 'Finish'
     }}) public labels!: object;
-    @Prop({default: 'green'}) public accentColor!: string;
-    @Prop({default: 'white'}) public backgroundColor!: string;
+    @Prop({default: 'green'}) public numberAccentColor!: string;
+    @Prop({default: 'white'}) public numberBackgroundColor!: string;
+    @Prop({default: 'white'}) public toolTipBackgroundColor!: string;
+    @Prop({default: '3'}) public toolTipBorderRadius!: string;
+    @Prop({default: true}) public showNumber!: boolean;
 
     // @Prop() public tooltipComponent!: ?React$Component;
     // @Prop() public stepNumberComponent!: ?React$Component;
     // @Prop() public easing!: Function;
 
     private onLoaded(): void {
-      // console.log('Copilot loaded');
+      console.log('Copilot loaded');
       if (platform.isAndroid) {
         this.getDeviceInfoAndroid();
       } else {
@@ -327,11 +334,13 @@
         const step = this.computedSteps[0];
         if (step.target && step.target.isLoaded && step.target.isLayoutValid) {
           this.copilotVisible = true;
-        }
-      } else {
+          //@ts-ignored
+          this.$emit('start');
+        } else {
         //notReady is emitted if the given layout is not valid or loaded in, copilot will not start
         //@ts-ignore
         this.$emit('notReady');
+      }
       }
     }
 
@@ -353,7 +362,7 @@
       this.copilotVisible = false;
       this.stepCount = 0;
       //@ts-ignore
-      this.$emit('copilotStopped');
+      this.$emit('stop');
 
       // reset everything to allow the next steps to enter properly
 
@@ -446,7 +455,12 @@
     }
 
     get computedTooltipStyle(): object {
-      return this.tooltipStyle;
+      // decided between the default or by step
+      if (this.computedCurrentStep && this.computedCurrentStep.customTooltipStyle) {
+        return this.computedCurrentStep.customTooltipStyle;
+      } else {
+        return this.tooltipStyle;
+      }
     }
 
     get computedArrow(): ArrowPosition {
@@ -461,6 +475,41 @@
       return this.safeArea;
     }
 
+    get computedShowNumber(): boolean {
+      // decided between the default or by step
+      if (this.computedCurrentStep && this.computedCurrentStep.showNumber !== undefined) {
+        return this.computedCurrentStep.showNumber;
+      } else {
+        return this.showNumber;
+      }
+    }
+
+    get computedNumberAccentColor(): string {
+      // decided between the default or by step
+      if (this.computedCurrentStep && this.computedCurrentStep.numberAccentColor) {
+        return this.computedCurrentStep.numberAccentColor;
+      } else {
+        return this.numberAccentColor;
+      }
+    }
+
+    get computedNumberBackgroundColor(): string {
+      // decided between the default or by step
+      if (this.computedCurrentStep && this.computedCurrentStep.numberBackgroundColor) {
+        return this.computedCurrentStep.numberBackgroundColor;
+      } else {
+        return this.numberBackgroundColor;
+      }
+    }
+
+    get computedLabels(): object {
+      // decided between the default or by step
+      if (this.computedCurrentStep && this.computedCurrentStep.customLabels) {
+        return this.computedCurrentStep.customLabels;
+      } else {
+        return this.labels;
+      }
+    }
 
   }
 

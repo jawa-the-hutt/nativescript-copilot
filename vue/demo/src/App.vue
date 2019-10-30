@@ -43,8 +43,9 @@
         :labels="labels"
         :tooltipStyle="tooltipStyle"
         :overlayColor="overlayColor"
-        :backgroundColor="backgroundColor"
-        :accentColor="accentColor"
+        :toolTipBackgroundColor="backgroundColor"
+        :numberBackgroundColor="backgroundColor"
+        :numberAccentColor="accentColor"
         ref="copilot"
       />
     </Gridlayout>
@@ -55,6 +56,7 @@
   import { Component, Vue } from 'vue-property-decorator';
   import TestingPageTwo from './tesing-page-two.vue';
   import { Step } from '../../';
+  
 
   @Component({
   })
@@ -107,7 +109,7 @@
           // @ts-ignore
           target: this.$refs.step1.nativeView,
           animated: true,
-          isFirstStep: true
+          isFirstStep: true,
         },
         {
           name: 'Second',
@@ -167,14 +169,42 @@
           animated: true,
         },
         {
+          name: 'Fourth',
+          text: '',
+          order: 9,
+          // @ts-ignore
+          target: this.$refs.step4.nativeView,
+          animated: true,
+          isCustom: true,
+          itemTemplate: '<GridLayout columns="*,*"><Image col="0" src="~/assets/logo.png" /><Label col="1" textWrap="true" text="This is a custom template with other options" color="white" padding="5"/></GridLayout>',
+          customBackgroundColor: 'black',
+          customBorderRadius: '15',
+          numberBackgroundColor: 'white',
+          numberAccentColor: 'black',
+          customTooltipStyle:  {
+            fontFamily: 'Avenir-Bold',
+            tooltipFontSize: 12,
+            tooltipTextColor: 'white',
+            buttonFontSize: 12,
+            accentColor: 'white'
+          },
+          customLabels: {
+            skip: 'Stop',
+            previous: 'Before',
+            next: 'Continue',
+            finish: 'Done'
+          }
+        },
+        {
           name: 'Whole Page',
-          text: 'This is darkening the whole page',
-          order: 8,
+          text: 'This is darkening the whole page and removing the number',
+          order: 10,
           // @ts-ignore
           target: this.$refs.wholePage.nativeView,
           animated: true,
           isLastStep: true,
           darkenWholePage: true,
+          showNumber: false,
         }
       ]
     }

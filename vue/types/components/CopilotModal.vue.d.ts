@@ -23,8 +23,11 @@ export default class CopilotModal extends Vue {
     androidStatusBarVisible: boolean;
     overlayColor: string;
     labels: object;
-    accentColor: string;
-    backgroundColor: string;
+    numberAccentColor: string;
+    numberBackgroundColor: string;
+    toolTipBackgroundColor: string;
+    toolTipBorderRadius: string;
+    showNumber: boolean;
     private onLoaded;
     private getDeviceInfoAndroid;
     private getDeviceInfoIOS;
@@ -45,4 +48,8 @@ export default class CopilotModal extends Vue {
     readonly computedArrow: ArrowPosition;
     readonly computedArrowClipPath: string;
     readonly computedSafeArea: Points;
+    readonly computedShowNumber: boolean;
+    readonly computedNumberAccentColor: string;
+    readonly computedNumberBackgroundColor: string;
+    readonly computedLabels: object;
 }

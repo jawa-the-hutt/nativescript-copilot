@@ -9,6 +9,7 @@ export default class ViewMask extends Vue {
     animationDuration: number;
     animated: boolean;
     overlayColor: string;
+    wholePage: boolean;
     onPositionChanged(): void;
     onSizeChanged(): void;
     setupAnimation(animationDuration: any, position?: any, size?: any): void;

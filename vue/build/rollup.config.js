@@ -50,6 +50,7 @@ const external = [
   "tns-core-modules/platform",
   "tns-core-modules/application",
   "tns-core-modules/ui/frame",
+  "tns-core-modules/ui/builder"
 ];
 const globals = {
   // Provide global variable names to replace your external imports
@@ -60,6 +61,7 @@ const globals = {
   "tns-core-modules/platform": "platform",
   "tns-core-modules/application": "application",
   "tns-core-modules/ui/frame": "frame",
+  "tns-core-modules/ui/builder": "builder",
 };
 
 // Customize configs for individual targets

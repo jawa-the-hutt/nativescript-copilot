@@ -10,6 +10,16 @@ export type Step = {
   isLastStep?: boolean;
   darkenWholePage?: boolean;
   verticalOffset?: number;
+  showNumber?: boolean;
+  numberAccentColor?: string;
+  numberBackgroundColor?: string;
+  isCustom?: boolean;
+  customBackgroundColor?: string;
+  customBorderRadius?: string;
+  itemTemplate?: string;
+  customTooltipStyle?: object;
+  customLabels?: object;
+
 };
 
 export type ValueXY = {

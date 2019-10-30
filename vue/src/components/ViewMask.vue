@@ -30,6 +30,7 @@
     @Prop() public animationDuration!: number;
     @Prop({default: true}) public animated!: boolean;
     @Prop({default: 'rgb(0, 0, 0, 0.4)'}) public overlayColor!: string;
+    @Prop({default: true}) public wholePage!: boolean;
 
     @Watch('position')
     onPositionChanged(): void {
@@ -53,10 +54,18 @@
         bottom
       } = this.points;
 
-      return {
-          clipPath: `polygon(0% 0%, 0% 100%, ${left}% 100%, ${left}% ${top}%, ${right}% ${top}%, ${right}% ${bottom}%, ${left}% ${bottom}%,${left}% 100%, 100% 100%, 100% 0%);`,
+      if (this.wholePage) {
+        return {
+            clipPath: `polygon(0% 0%, 0% 100%, ${left}% 100%, ${left}% ${top}%, ${right}% ${top}%, ${right}% ${bottom}%, ${left}% ${bottom}%,${left}% 100%, 100% 100%, 100% 0%);`,
+            backgroundColor: this.overlayColor
+        };
+      } else {
+        return {
+          // remove clipPath if wholePage is taken up
+          clipPath: undefined,
           backgroundColor: this.overlayColor
-      };
+        };
+      }
 
     }
 
