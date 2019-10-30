@@ -75,11 +75,24 @@ You can combine multiple `refs` to create a tour.  You will need to create an ob
           target: this.$refs.step3.nativeView,
           animated: false,
           isCustom: true,
-          itemTemplate: '<Label text="This is a custom template!" color="green"/>'
+          itemTemplate: '<Label text="This is a custom template!" color="green"/>',
           customBackgroundColor: 'black',
           customBorderRadius: '15',
           numberAccentColor: 'white',
           numberBackgroundColor: 'green',
+           customTooltipStyle:  {
+            fontFamily: 'Avenir-Bold',
+            tooltipFontSize: 12,
+            tooltipTextColor: 'white',
+            buttonFontSize: 12,
+            accentColor: 'white'
+          },
+          customLabels: {
+            skip: 'Stop',
+            previous: 'Before',
+            next: 'Continue',
+            finish: 'Done'
+          }
         },
         {
           name: 'Sixth',
@@ -88,7 +101,6 @@ You can combine multiple `refs` to create a tour.  You will need to create an ob
           target: this.$refs.step4.nativeView,
           animated: false,
           darkenWholePage: true,
-          showNumber: false,
           isLastStep: true
         }
       ]
@@ -115,6 +127,8 @@ There are several configuration items in a `Step` object:
 | customBorderRadius    | string        | Use in the case of wanting a custom border radius for the tool tip on a specific step    |
 | isCustom              | boolean       | Use in the case of wanting a customized tool tip, along with the itemTemplate option    |
 | itemTemplate          | string        | Used if custom component is true on the step, pass in a string value of XML  ( events and dynamic props do not work )   |
+| customTooltipStyle    | object        | Used in the case of wanting a custom style for the tool tip on a specific step     |
+| customLabels          | object        | Used in the case of wanting a custom style for the tool tip on a specific step     |
 
 You will then pass the step config into the `Copilot` component as the `steps` prop.  In the example below, we are using a computed property to feed the `steps` prop:
 

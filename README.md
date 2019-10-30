@@ -101,7 +101,6 @@ You can combine multiple `refs` to create a tour.  You will need to create an ob
           target: this.$refs.step4.nativeView,
           animated: false,
           darkenWholePage: true,
-          showNumber: false,
           isLastStep: true
         }
       ]
