@@ -204,7 +204,6 @@
           animated: true,
           isLastStep: true,
           darkenWholePage: true,
-          showNumber: false,
         }
       ]
     }
