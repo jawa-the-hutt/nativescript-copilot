@@ -144,7 +144,7 @@
         },
         {
           name: 'Fifth',
-          text: 'This has a veritcal offset of -5 which will push the step 5dp towards the top',
+          text: 'This has a veritcal offset of -5 which will push the step 5dp towards the top            ',
           order: 5,
           // @ts-ignore
           target: this.$refs.step5.nativeView,
