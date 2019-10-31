@@ -126,9 +126,9 @@ There are several configuration items in a `Step` object:
 | numberBackgroundColor | string        | Used in the case of wanting a custom number background color on a specific step        |
 | numberAccentColor     | string        | Used in the case of wanting a custom number accent color on a specific step         |
 | customBackgroundColor | string        | Use in the case of wanting a custom background tool tip color on a specific step      |
-| customBorderRadius    | string        | Use in the case of wanting a custom border radius for the tool tip on a specific step    |
-| highlightPadding      | string        | Use in the case of wanting a custom padding on the highlightedzone of the mask      |
-| highlightBorderRadius    | string        | Use in the case of wanting a custom border radius on the highlightedzone of the mask      |
+| customBorderRadius    | string        | Use in the case of wanting a custom border radius for the tool tip on a specific step |
+| highlightPadding      | number        | Use in the case of wanting a custom padding on the highlightedzone of the mask      |
+| highlightBorderRadius | number        | Use in the case of wanting a custom border radius on the highlightedzone of the mask on a specific step  *(**Warning**: when using border radius, with how this plugin functions, having too high of a border radius / too high of a border radius near the edge of the device will cause IOS UI to misfunction, it is suggested to descrease your border radius)* *(**Note**: using border radius will decrease your highlighted area, use padding to increase it again)*    |
 | isCustom              | boolean       | Use in the case of wanting a customized tool tip, along with the itemTemplate option    |
 | itemTemplate          | string        | Used if custom component is true on the step, pass in a string value of XML  ( events and dynamic props do not work )   |
 | customTooltipStyle    | object        | Used in the case of wanting a custom style for the tool tip on a specific step     |
@@ -161,7 +161,7 @@ There are several other props that can be passed into the `Copilot` component.  
 | numberAccentColor         | string | green      | Used to set the default number accent color           |
 | toolTipBackgroundColor    | string | white      | Used to set the default tool tip background color |
 | toolTipBorderRadius       | string | '3'        | Used to set the default tool tip border radius    |
-| highlightBorderRadius     | number | 0          | Used to set the default highlight border radius on the mask|
+| highlightBorderRadius     | number | 0          | Used to set the default highlight border radius on the mask *(**Warning**: when using border radius, with how this plugin functions, having too high of a border radius / too high of a border radius near the edge of the device will cause IOS UI to misfunction, it is suggested to descrease your border radius)* *(**Note**: using border radius will decrease your highlighted area, use padding to increase it again)*|
 | highlightPadding          | number | 5          | Used to set the default highlight padding on the mask|
 
 

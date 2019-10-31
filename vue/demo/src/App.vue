@@ -9,7 +9,7 @@
           <StackLayout col="1" verticalAlignment="middle" horizontalAlignment="center">
             <Image ref="step2" src="~/assets/logo.png" height="50%" width="50%" borderWidth="0"/>
           </StackLayout> 
-          <StackLayout col="2" verticalAlignment="middle" horizontalAlignment="right">
+          <StackLayout col="2" verticalAlignment="middle" horizontalAlignment="right" marginRight="0">
             <Label ref="step3" text="Top Right" textWrap="true" marginRight="15" verticalAlignment="middle" horitzontalAlignment="right" color="white" borderWidth="0"/>
           </StackLayout> 
         </GridLayout>
@@ -117,7 +117,9 @@
           order: 2,
           // @ts-ignore
           target: this.$refs.step2.nativeView,
-          animated: true
+          animated: true,
+          highlightPadding: 0,
+          highlightBorderRadius: 40,
         },
         {
           name: 'Third',
@@ -125,17 +127,19 @@
           order: 3,
           // @ts-ignore
           target: this.$refs.step3.nativeView,
-          animated: true
+          animated: true,
+          highlightPadding: 5,
+          highlightBorderRadius: 40,
         },
         {
           name: 'Fourth',
-          text: 'Here is an Image with rouded corners and padding!',
+          text: 'Here is an Image!',
           order: 4,
           // @ts-ignore
           target: this.$refs.step4.nativeView,
           animated: true,
-          highlightPadding: 10,
-          highlightBorderRadius: 50,
+          highlightPadding: 40,
+          highlightBorderRadius: 100,
 
         },
         {
@@ -199,7 +203,7 @@
         },
         {
           name: 'Whole Page',
-          text: 'This is darkening the whole page and removing the number',
+          text: 'This is darkening the whole page',
           order: 10,
           // @ts-ignore
           target: this.$refs.wholePage.nativeView,

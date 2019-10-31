@@ -35,6 +35,12 @@ let ViewMask = class ViewMask extends Vue {
             right: 0,
             bottom: 0
         };
+        this.clipPoints = {
+            left: 0,
+            top: 0,
+            right: 0,
+            bottom: 0
+        };
         this.maskLocation = {
             left: 0,
             top: 0,
@@ -68,10 +74,7 @@ let ViewMask = class ViewMask extends Vue {
         }
     }
     get computedBorderWidth() {
-        let width = this.points.right - this.points.left;
-        let height = this.points.bottom - this.points.top;
-        let max = width > height ? width : height;
-        return max * 10;
+        return this.computedRadius / 1.5;
     }
     get computedMaskLocation() {
         let mask = { ...this.maskLocation };
@@ -80,8 +83,22 @@ let ViewMask = class ViewMask extends Vue {
     get computedMask() {
         return this.mask;
     }
+    get computedHighlightBox() {
+        let position = this.position;
+        let size = this.size;
+        const right = ((position.x + size.x));
+        const bottom = ((position.y) + size.y);
+        return {
+            clipPath: ` polygon(0 0, ${right} 0, ${right} ${bottom}, 0 ${bottom});`
+        };
+    }
     get computedRadius() {
-        return this.radius.r;
+        let width = this.points.right - this.points.left;
+        let height = this.points.bottom - this.points.top;
+        let radius = this.radius.r;
+        let max = (width > height ? width : height) / 2;
+        let r = radius === 0 ? 0 : max * (radius * 0.01);
+        return r;
     }
     animateSize(animationDuration, position, size) {
         const left = ((position.x));
@@ -106,10 +123,33 @@ let ViewMask = class ViewMask extends Vue {
                 .start();
         }
     }
+    animateClipPath(animationDuration, position, size) {
+        const left = (Math.max((((position.x) / this.layout.width) * 100), 0));
+        const top = (Math.max((((position.y) / this.layout.height) * 100), 0));
+        const right = (Math.max((((position.x + size.x) / this.layout.width) * 100), 0));
+        const bottom = (Math.max(((((position.y) + size.y) / this.layout.height) * 100), 0));
+        const to = {
+            left,
+            top,
+            right,
+            bottom
+        };
+        if (this.animated) {
+            new TWEEN.Tween(this.clipPoints)
+                .to(to, animationDuration)
+                .easing(TWEEN.Easing.Quadratic.Out)
+                .start();
+        }
+        else {
+            new TWEEN.Tween(this.clipPoints)
+                .to(to, 1)
+                .start();
+        }
+    }
     animatePosition(animationDuration, mask) {
         const left = 0;
-        const top = (mask.top) - this.highlightedPadding;
-        const right = (mask.right) - this.highlightedPadding;
+        const top = (mask.top) - this.highlightPadding;
+        const right = (mask.right) - this.highlightPadding;
         const bottom = 0;
         const to = {
             left,
@@ -178,7 +218,7 @@ __decorate([
 ], ViewMask.prototype, "mask", void 0);
 __decorate([
     Prop({ default: 5 })
-], ViewMask.prototype, "highlightedPadding", void 0);
+], ViewMask.prototype, "highlightPadding", void 0);
 __decorate([
     Prop({ default: 0 })
 ], ViewMask.prototype, "highlightBorderRadius", void 0);
@@ -284,13 +324,13 @@ var normalizeComponent_1 = normalizeComponent;
 const __vue_script__ = script;
 
 /* template */
-var __vue_render__ = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('Gridlayout',{key:_vm.computedMask.middle,staticClass:"overlay",attrs:{"rows":((this.computedMaskLocation.top) + ", auto, *"),"columns":("*, auto, " + (_vm.computedMaskLocation.right)),"horizontalAlignment":_vm.computedMask.alignment,"backgroundColor":"transparent"},on:{"loaded":function($event){return _vm.setupAnimation(1)}}},[_c('Gridlayout',{key:_vm.computedMask.middle,ref:"grid",staticClass:"mask",attrs:{"row":'1',"col":"1","width":(_vm.points.right-_vm.points.left) + (_vm.highlightedPadding * 2),"height":(_vm.points.bottom-_vm.points.top) + (_vm.highlightedPadding * 2),"backgroundColor":'transparent',"borderColor":_vm.overlayColor,"borderRadius":_vm.computedRadius,"borderWidth":_vm.computedBorderWidth},on:{"tap":function($event){return _vm.$emit('highlight-tap')},"layoutChanged":function($event){return _vm.gridLoaded()}}}),_vm._v(" "),_c('StackLayout',{attrs:{"row":"0","col":"0","height":"100%","width":"100%","backgroundColor":_vm.overlayColor},on:{"tap":function($event){return _vm.absorbTap()}}}),_vm._v(" "),_c('StackLayout',{attrs:{"row":"2","col":"0","height":"100%","width":"100%","backgroundColor":_vm.overlayColor},on:{"tap":function($event){return _vm.absorbTap()}}}),_vm._v(" "),_c('StackLayout',{attrs:{"row":"1","col":"0","height":"auto","width":"auto","backgroundColor":_vm.overlayColor},on:{"tap":function($event){return _vm.absorbTap()}}}),_vm._v(" "),_c('StackLayout',{attrs:{"row":"0","col":"1","height":"auto","width":"auto","backgroundColor":_vm.overlayColor},on:{"tap":function($event){return _vm.absorbTap()}}}),_vm._v(" "),_c('StackLayout',{attrs:{"row":"2","col":"1","height":"auto","width":"auto","backgroundColor":_vm.overlayColor},on:{"tap":function($event){return _vm.absorbTap()}}}),_vm._v(" "),_c('StackLayout',{attrs:{"row":"1","col":"2","height":"auto","width":"auto","backgroundColor":_vm.overlayColor},on:{"tap":function($event){return _vm.absorbTap()}}}),_vm._v(" "),_c('StackLayout',{attrs:{"row":"0","col":"2","height":"100%","width":"100%","backgroundColor":_vm.overlayColor},on:{"tap":function($event){return _vm.absorbTap()}}}),_vm._v(" "),_c('StackLayout',{attrs:{"row":"2","col":"2","height":"100%","width":"100%","backgroundColor":_vm.overlayColor},on:{"tap":function($event){return _vm.absorbTap()}}})],1)};
+var __vue_render__ = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('Gridlayout',{staticClass:"overlay",attrs:{"rows":((this.computedMaskLocation.top) + ", auto, *"),"columns":("*, auto, " + (_vm.computedMaskLocation.right)),"horizontalAlignment":_vm.computedMask.alignment,"backgroundColor":"transparent"},on:{"loaded":function($event){return _vm.setupAnimation(1)}}},[_c('StackLayout',{attrs:{"row":"1","col":"1"}},[_c('AbsoluteLayout',{style:(_vm.computedHighlightBox),attrs:{"width":(_vm.points.right-_vm.points.left) + (_vm.highlightPadding * 2),"height":(_vm.points.bottom-_vm.points.top) + (_vm.highlightPadding * 2)}},[_c('Gridlayout',{ref:"grid",staticClass:"mask",attrs:{"width":(_vm.points.right-_vm.points.left) + (_vm.highlightPadding * 2) + _vm.computedBorderWidth,"height":(_vm.points.bottom-_vm.points.top) + (_vm.highlightPadding * 2) + _vm.computedBorderWidth,"top":-(_vm.computedBorderWidth/2),"left":-(_vm.computedBorderWidth/2),"backgroundColor":'transparent',"borderColor":_vm.overlayColor,"borderRadius":_vm.computedRadius,"borderWidth":_vm.computedBorderWidth},on:{"tap":function($event){return _vm.$emit('highlight-tap')},"layoutChanged":function($event){return _vm.gridLoaded()}}})],1)],1),_vm._v(" "),_c('StackLayout',{attrs:{"row":"0","col":"0","height":"100%","width":"100%","backgroundColor":_vm.overlayColor},on:{"tap":function($event){return _vm.absorbTap()}}}),_vm._v(" "),_c('StackLayout',{attrs:{"row":"2","col":"0","height":"100%","width":"100%","backgroundColor":_vm.overlayColor},on:{"tap":function($event){return _vm.absorbTap()}}}),_vm._v(" "),_c('StackLayout',{attrs:{"row":"1","col":"0","height":"auto","width":"auto","backgroundColor":_vm.overlayColor},on:{"tap":function($event){return _vm.absorbTap()}}}),_vm._v(" "),_c('StackLayout',{attrs:{"row":"0","col":"1","height":"auto","width":"auto","backgroundColor":_vm.overlayColor},on:{"tap":function($event){return _vm.absorbTap()}}}),_vm._v(" "),_c('StackLayout',{attrs:{"row":"2","col":"1","height":"auto","width":"auto","backgroundColor":_vm.overlayColor},on:{"tap":function($event){return _vm.absorbTap()}}}),_vm._v(" "),_c('StackLayout',{attrs:{"row":"1","col":"2","height":"auto","width":"auto","backgroundColor":_vm.overlayColor},on:{"tap":function($event){return _vm.absorbTap()}}}),_vm._v(" "),_c('StackLayout',{attrs:{"row":"0","col":"2","height":"100%","width":"100%","backgroundColor":_vm.overlayColor},on:{"tap":function($event){return _vm.absorbTap()}}}),_vm._v(" "),_c('StackLayout',{attrs:{"row":"2","col":"2","height":"100%","width":"100%","backgroundColor":_vm.overlayColor},on:{"tap":function($event){return _vm.absorbTap()}}})],1)};
 var __vue_staticRenderFns__ = [];
 
   /* style */
   const __vue_inject_styles__ = undefined;
   /* scoped */
-  const __vue_scope_id__ = "data-v-55cde483";
+  const __vue_scope_id__ = "data-v-47e99cfb";
   /* module identifier */
   const __vue_module_identifier__ = undefined;
   /* functional template */
@@ -689,7 +729,6 @@ let CopilotModal = class CopilotModal extends Vue {
         this.loaded = false;
     }
     onLoaded() {
-        console.log('Copilot loaded');
         if (isAndroid) {
             this.getDeviceInfoAndroid();
         }
@@ -799,13 +838,12 @@ let CopilotModal = class CopilotModal extends Vue {
         if (horizontalPosition === 'left') {
             tooltip.right = objRight;
             tooltip.alignment = 'right';
-            arrow.right = objRight < MARGIN ? objRight + (MARGIN * 2) : objRight + MARGIN;
+            arrow.right = objRight < MARGIN ? objRight + (MARGIN * 2) : objRight + MARGIN + this.computedHighlightPadding;
         }
         else {
             tooltip.left = objLeft;
-            mask.right = objRight;
             tooltip.alignment = 'left';
-            arrow.left = objLeft < MARGIN ? objLeft + (MARGIN * 2) : objLeft + MARGIN;
+            arrow.left = objLeft < MARGIN ? objLeft + (MARGIN * 2) : objLeft + MARGIN + this.computedHighlightPadding;
         }
         mask.top = ((obj.top) - (isAndroid ? 0 : this.safeArea.top));
         mask.right = objRight;

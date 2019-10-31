@@ -2,6 +2,7 @@ import { Vue } from 'vue-property-decorator';
 import { Layout, ValueXY, Points, TooltipPosition } from '../utils/types';
 export default class ViewMask extends Vue {
     private points;
+    private clipPoints;
     private maskLocation;
     private radius;
     size: ValueXY;
@@ -13,7 +14,7 @@ export default class ViewMask extends Vue {
     overlayColor: string;
     wholePage: boolean;
     mask: TooltipPosition;
-    highlightedPadding: number;
+    highlightPadding: number;
     highlightBorderRadius: number;
     onPositionChanged(): void;
     onSizeChanged(): void;
@@ -22,8 +23,10 @@ export default class ViewMask extends Vue {
     readonly computedBorderWidth: number;
     readonly computedMaskLocation: Points;
     readonly computedMask: TooltipPosition;
+    readonly computedHighlightBox: object;
     readonly computedRadius: number;
     private animateSize;
+    private animateClipPath;
     private animatePosition;
     private animateBorderRadius;
     private absorbTap;

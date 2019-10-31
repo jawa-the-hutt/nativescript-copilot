@@ -169,7 +169,7 @@
     // @Prop() public easing!: Function;
 
     private onLoaded(): void {
-      console.log('Copilot loaded');
+      // console.log('Copilot loaded');
       if (platform.isAndroid) {
         this.getDeviceInfoAndroid();
       } else {
@@ -317,14 +317,13 @@
         tooltip.right = objRight //< MARGIN ? objRight + MARGIN : objRight;
         //  tooltip.left = objLeft < MARGIN ? objLeft + MARGIN : objLeft;
         tooltip.alignment = 'right';
-        arrow.right = objRight < MARGIN ? objRight + (MARGIN * 2) : objRight + MARGIN;
+        arrow.right = objRight < MARGIN ? objRight + (MARGIN * 2) : objRight + MARGIN + this.computedHighlightPadding;
       } else {
         // console.log('RIGHT RIGHT RIGHT RIGHT');
         // tooltip.right = objRight < MARGIN ? objRight + MARGIN : objRight;
         tooltip.left = objLeft //< MARGIN ? objLeft + MARGIN : objLeft;
-        mask.right =objRight;
         tooltip.alignment = 'left';
-        arrow.left = objLeft < MARGIN ? objLeft + (MARGIN * 2) : objLeft + MARGIN;
+        arrow.left = objLeft < MARGIN ? objLeft + (MARGIN * 2) : objLeft + MARGIN + this.computedHighlightPadding;
       }
 
       mask.top = ((obj.top) - (platform.isAndroid ? 0 : this.safeArea.top));
