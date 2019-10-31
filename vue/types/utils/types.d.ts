@@ -17,6 +17,8 @@ export declare type Step = {
     itemTemplate?: string;
     customTooltipStyle?: object;
     customLabels?: object;
+    highlightBorderRadius?: number;
+    highlightPadding?: number;
 };
 export declare type ValueXY = {
     x: number;

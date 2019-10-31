@@ -19,6 +19,8 @@ export type Step = {
   itemTemplate?: string;
   customTooltipStyle?: object;
   customLabels?: object;
+  highlightBorderRadius?: number;
+  highlightPadding?: number;
 
 };
 

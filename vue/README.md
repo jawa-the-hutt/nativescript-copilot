@@ -48,10 +48,12 @@ You can combine multiple `refs` to create a tour.  You will need to create an ob
         },
         {
           name: 'Second',
-          text: 'here is some text',
+          text: 'here is some text with a rounded highlighted zone and padding',
           order: 2,
           target: this.$refs.step2.nativeView,
-          animated: true
+          animated: true,
+          highlightBorderRadius: 10,
+          highlighPadding: 5,
         },
         {
           name: 'Third',
@@ -125,6 +127,8 @@ There are several configuration items in a `Step` object:
 | numberAccentColor     | string        | Used in the case of wanting a custom number accent color on a specific step         |
 | customBackgroundColor | string        | Use in the case of wanting a custom background tool tip color on a specific step      |
 | customBorderRadius    | string        | Use in the case of wanting a custom border radius for the tool tip on a specific step    |
+| highlightPadding      | string        | Use in the case of wanting a custom padding on the highlightedzone of the mask      |
+| highlightBorderRadius    | string        | Use in the case of wanting a custom border radius on the highlightedzone of the mask      |
 | isCustom              | boolean       | Use in the case of wanting a customized tool tip, along with the itemTemplate option    |
 | itemTemplate          | string        | Used if custom component is true on the step, pass in a string value of XML  ( events and dynamic props do not work )   |
 | customTooltipStyle    | object        | Used in the case of wanting a custom style for the tool tip on a specific step     |
@@ -146,16 +150,21 @@ You will then pass the step config into the `Copilot` component as the `steps` p
 ```
 
 There are several other props that can be passed into the `Copilot` component.  They are:
-| Name                      | Type   | Default    | Description    |
-| -----------------         | -------| -----------| -----------|
-| animationDuration         | string | 300        | Number of `ms` the animation will take to move to the next step |
-| labels                    | object | { skip: 'Skip', next: 'Next', previous: 'Previous', finish: 'Finish' } | The names of the four buttons used in the toolsip to move between tour steps.  `Skip` will end the tour at any step while `Finish` will only end at the very last step. |
-| tooltipStyle              | object | { fontFamily: Avenir-Light, tooltipFontSize: 14, tooltipTextColor: 'black', buttonFontSize: 14, accentColor: 'green' }        | Used to control the overall apperance of the tooltip |
-| overlayColor              | string | rgb(0, 0, 0, 0.4)           | Used to control the overlay color           |
+
+| Name             | Type          | Default       | Description    |
+| --------------   | --------------| --------------|--------------- |
+| animationDuration         | string | 300           | Number of `ms` the animation will take to move to the next step |
+| labels                    | object | { skip: 'Skip', next: 'Next', previous: 'Previous', finish: 'Finish' }            | The names of the four buttons used in the toolsip to move between tour steps.  `Skip` will end the tour at any step while `Finish` will only end at the very last step. |
+| tooltipStyle              | object | { fontFamily: Avenir-Light, tooltipFontSize: 14, tooltipTextColor: 'black', buttonFontSize: 14, accentColor: 'green' }  |  Used to control the overall apperance of the tooltip |
+| overlayColor              | string |  rgba(0, 0, 0, 0.4)            | Used to control the overlay color|
 | numberBackgroundColor     | string | white      | Used to set the default number background color           |
 | numberAccentColor         | string | green      | Used to set the default number accent color           |
-| toolTipBackgroundColor    | string | white      | Used to set the default tool tip background color           |
-| toolTipBorderRadius       | string | '3'        | Used to set the default tool tip border radius           |
+| toolTipBackgroundColor    | string | white      | Used to set the default tool tip background color |
+| toolTipBorderRadius       | string | '3'        | Used to set the default tool tip border radius    |
+| highlightBorderRadius     | number | 0          | Used to set the default highlight border radius on the mask|
+| highlightPadding          | number | 5          | Used to set the default highlight padding on the mask|
+
+
 
 An initialization example of the above options (done in typescript):
 
@@ -180,16 +189,19 @@ private numberAccentColor: string = 'green';
 private numberBackgroundColor: string = 'white';
 private toolTipBackgroundColor: string = 'white';
 private toolTipBorderRadius: string = '3';
+private highlightPadding: number = 5;
+private highlightBorderRadius: number = 10;
 ```
 
 There are several events emitted by the `Copilot` component:
 
 | Name           | Type          | Description    |
 | -------------- | --------------| --------------- |
-| stepChange     | object            | Emitted when a step progresses forward or backward, emits an object containing stepLeaving and stepArriving    |
+| step-change    | object            | Emitted when a step progresses forward or backward, emits an object containing stepLeaving and stepArriving    |
 | stop           | --            | Emitted when the copilot is stopped   |
 | start          | --            | Emitted when the copilot is started   |
-| notReady       | --            | Emitted when the copilot receives an invalid layout |
+| not-ready      | --            | Emitted when the copilot receives an invalid layout |
+| highlight-tap  | --            | Emitted when the copilot's highlightedzone is tapped |
 
 
 You will call the event from the `Copilot` component as the name of the chosen event.  In the example below, we are calling a function on the event:
@@ -197,10 +209,11 @@ You will call the event from the `Copilot` component as the name of the chosen e
 ```html
   <Copilot
     :steps="computedSteps"
-    @stepChange="stepChanged"
+    @step-change="stepChanged"
     @stop="copilotStopped"
-    @notReady="copilotNotReady"
+    @not-ready="copilotNotReady"
     @start="copilotStarted"
+    @highlight-tap="copilotHighlightTap"
     ref="copilot"
   />
 ```

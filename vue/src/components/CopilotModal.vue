@@ -1,11 +1,15 @@
 <template>
   <Gridlayout rows="*" columns="*" ref="container" v-if="computedCopilotVisible" @loaded="onLoaded()" >
     <ViewMask row="0" height="100%"
+      @highlight-tap="$emit('highlight-tap')"
       :animated="computedCurrentStep.animated"
       :size="computedSize"
       :position="computedPosition"
       :layout="computedLayout"
       :easing="easing"
+      :mask="computedMask"
+      :highlightPadding="computedHighlightPadding"
+      :highlightBorderRadius="computedHighlightBorderRadius"
       :wholePage="computedCurrentStep.wholePage"
       :animationDuration="animationDuration"
       :overlayColor="overlayColor"
@@ -23,6 +27,7 @@
       :stepNumber="computedCurrentStep.order"
       :stepNumberPosition="computedStepNumberPosition"
       :safeArea="computedSafeArea"
+      :numberFontFamilyStyle="computedTooltipStyle.fontFamily"
     />
     <Tooltip row="0" ref="tooltip"
       :backgroundColor="toolTipBackgroundColor"
@@ -65,6 +70,15 @@
   export default class CopilotModal extends Vue {
 
     private tooltip: TooltipPosition = {
+      left: 0,
+      top: 0, 
+      right: 0, 
+      bottom: 0,
+      middle: '*',
+      alignment: 'left'
+    };
+
+    private mask: TooltipPosition = {
       left: 0,
       top: 0, 
       right: 0, 
@@ -150,9 +164,8 @@
     @Prop({default: 'white'}) public toolTipBackgroundColor!: string;
     @Prop({default: '3'}) public toolTipBorderRadius!: string;
     @Prop({default: true}) public showNumber!: boolean;
-
-    // @Prop() public tooltipComponent!: ?React$Component;
-    // @Prop() public stepNumberComponent!: ?React$Component;
+    @Prop({default: 0}) public highlightBorderRadius!: number;
+    @Prop({default: 5}) public highlightPadding!: number;
     // @Prop() public easing!: Function;
 
     private onLoaded(): void {
@@ -218,6 +231,7 @@
       
       const layout = {...this.layout};
       const tooltip: TooltipPosition = {...this.tooltip};
+      const mask: TooltipPosition = {...this.mask};
       const tooltipStyle: object =  {...this.tooltipStyle};
       const arrow: ArrowPosition =  {...this.arrow};
       let arrowClipPath: string =  '';
@@ -273,6 +287,13 @@
       tooltip.right = "*"
       tooltip.middle = "auto";
 
+
+      mask.top = "*"
+      mask.bottom = "*"
+      mask.left = "*"
+      mask.right = "*"
+      mask.middle = "auto";
+
       arrow.height = ARROW_SIZE;
       arrow.width = ARROW_SIZE * 2;
       arrow.right ='*';
@@ -281,14 +302,12 @@
       if (verticalPosition === 'bottom') {
         // console.log('BOTTOM BOTTOM BOTTOM BOTTOM')
         tooltip.top = ((obj.top + obj.height) - (platform.isAndroid ? 0 : this.safeArea.top)) + MARGIN;
-
         arrow.location = 'top';
         arrowClipPath = `polygon(50% 0%, 0% 100%, 100% 100%)`;
 
       } else {
         // console.log('TOP TOP TOP TOP')
-        tooltip.bottom = (layout.height - (obj.top + (this.safeArea.bottom - this.safeArea.top))) - MARGIN 
-
+        tooltip.bottom = (layout.height - (obj.top + (this.safeArea.bottom - this.safeArea.top))) - MARGIN;
         arrow.location = 'bottom';
         arrowClipPath = `polygon(50% 100%, 0% 0%, 100% 0%)`;
       }
@@ -303,10 +322,15 @@
         // console.log('RIGHT RIGHT RIGHT RIGHT');
         // tooltip.right = objRight < MARGIN ? objRight + MARGIN : objRight;
         tooltip.left = objLeft //< MARGIN ? objLeft + MARGIN : objLeft;
+        mask.right =objRight;
         tooltip.alignment = 'left';
         arrow.left = objLeft < MARGIN ? objLeft + (MARGIN * 2) : objLeft + MARGIN;
       }
 
+      mask.top = ((obj.top) - (platform.isAndroid ? 0 : this.safeArea.top));
+      mask.right=objRight;
+
+      this.mask = mask;
       this.tooltip = tooltip;
       this.tooltipStyle = tooltipStyle;
       this.arrow = arrow;
@@ -339,7 +363,7 @@
         } else {
         //notReady is emitted if the given layout is not valid or loaded in, copilot will not start
         //@ts-ignore
-        this.$emit('notReady');
+        this.$emit('not-ready');
       }
       }
     }
@@ -348,14 +372,14 @@
       this.stepCount = this.stepCount === this.steps.length - 1 ? 0 : this.stepCount + 1;
       this.currentStep = this.steps[this.stepCount];
       //@ts-ignore
-      this.$emit('stepChange', {stepLeaving: this.steps[this.stepCount - 1], stepArriving: this.steps[this.stepCount]});
+      this.$emit('step-change', {stepLeaving: this.steps[this.stepCount - 1], stepArriving: this.steps[this.stepCount]});
     }
 
     private prev(): void {
       this.stepCount = this.stepCount ===  0 ? this.steps.length - 1 : this.stepCount - 1;
       this.currentStep = this.steps[this.stepCount];
       //@ts-ignore
-      this.$emit('stepChange', {stepLeaving: this.steps[this.stepCount + 1], stepArriving: this.steps[this.stepCount]});
+      this.$emit('step-change', {stepLeaving: this.steps[this.stepCount + 1], stepArriving: this.steps[this.stepCount]});
     }
 
     private stop(): void {
@@ -454,6 +478,10 @@
       return this.tooltip;
     }
 
+    get computedMask(): TooltipPosition {
+      return this.mask;
+    }
+
     get computedTooltipStyle(): object {
       // decided between the default or by step
       if (this.computedCurrentStep && this.computedCurrentStep.customTooltipStyle) {
@@ -508,6 +536,24 @@
         return this.computedCurrentStep.customLabels;
       } else {
         return this.labels;
+      }
+    }
+
+    get computedHighlightBorderRadius(): number {
+      // decided between the default or by step
+      if (this.computedCurrentStep && this.computedCurrentStep.highlightBorderRadius) {
+        return this.computedCurrentStep.highlightBorderRadius;
+      } else {
+        return this.highlightBorderRadius;
+      }
+    }
+
+    get computedHighlightPadding(): number {
+      // decided between the default or by step
+      if (this.computedCurrentStep && this.computedCurrentStep.highlightPadding) {
+        return this.computedCurrentStep.highlightPadding;
+      } else {
+        return this.highlightPadding;
       }
     }
 

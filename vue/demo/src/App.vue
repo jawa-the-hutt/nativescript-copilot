@@ -129,11 +129,13 @@
         },
         {
           name: 'Fourth',
-          text: 'Here is an Image!',
+          text: 'Here is an Image with rouded corners and padding!',
           order: 4,
           // @ts-ignore
           target: this.$refs.step4.nativeView,
           animated: true,
+          highlightPadding: 10,
+          highlightBorderRadius: 50,
 
         },
         {

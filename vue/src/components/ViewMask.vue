@@ -1,15 +1,32 @@
 <template>
-  <ContentView 
-    @tap="absorbTap()"
-    :style="computedHighlightBox" 
-    @loaded="setupAnimation(1)"
-  />
+    <Gridlayout @loaded="setupAnimation(1)" :rows="`${this.computedMaskLocation.top}, auto, *`" 
+      :columns="`*, auto, ${computedMaskLocation.right}`" class="overlay" :horizontalAlignment="computedMask.alignment"
+      backgroundColor="transparent" :key="computedMask.middle">
+      <!-- Start Highlight box -->
+      <Gridlayout ref="grid" :row="'1'" col="1" class="mask"
+        @tap="$emit('highlight-tap')"
+        @layoutChanged="gridLoaded()" :key="computedMask.middle" 
+        :width="(points.right-points.left) + (highlightedPadding * 2)"
+        :height="(points.bottom-points.top) + (highlightedPadding * 2)"
+        :backgroundColor="'transparent'"  :borderColor="overlayColor" :borderRadius="computedRadius" :borderWidth="computedBorderWidth"
+      />
+      <!-- End of Highlight box -->
+      <!-- Darkened overlay -->
+      <StackLayout row="0" col="0" height="100%" width="100%" @tap="absorbTap()" :backgroundColor="overlayColor"/>
+      <StackLayout row="2" col="0" height="100%" width="100%" @tap="absorbTap()" :backgroundColor="overlayColor"/>
+      <StackLayout row="1" col="0" height="auto" width="auto" @tap="absorbTap()" :backgroundColor="overlayColor"/>
+      <StackLayout row="0" col="1" height="auto" width="auto" @tap="absorbTap()" :backgroundColor="overlayColor"/>
+      <StackLayout row="2" col="1" height="auto" width="auto" @tap="absorbTap()" :backgroundColor="overlayColor"/>
+      <StackLayout row="1" col="2" height="auto" width="auto" @tap="absorbTap()" :backgroundColor="overlayColor"/>
+      <StackLayout row="0" col="2" height="100%" width="100%" @tap="absorbTap()" :backgroundColor="overlayColor"/>
+      <StackLayout row="2" col="2" height="100%" width="100%" @tap="absorbTap()" :backgroundColor="overlayColor"/>
+      <!-- End Darkened overlay -->
+    </Gridlayout>
 </template>
 <script lang="ts">
   import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
   import { TWEEN } from 'nativescript-tweenjs';
-
-  import { Layout, ValueXY, Points } from '../utils/types';
+  import { Layout, ValueXY, Points, TooltipPosition, Step } from '../utils/types';
 
   @Component({
     name: 'view-mask'
@@ -22,6 +39,18 @@
       right: 0,
       bottom: 0
     };
+
+    // Alertnates numbers constantly
+    private maskLocation: Points = {
+      left: 0,
+      top: 0,
+      right: 0,
+      bottom: 0
+    }
+
+    private radius: any = {
+      r: 0,
+    }
     
     @Prop() public size!: ValueXY;
     @Prop() public position!: ValueXY;
@@ -31,51 +60,89 @@
     @Prop({default: true}) public animated!: boolean;
     @Prop({default: 'rgb(0, 0, 0, 0.4)'}) public overlayColor!: string;
     @Prop({default: true}) public wholePage!: boolean;
+    @Prop() public mask!: TooltipPosition;
+    @Prop({default: 5}) public highlightedPadding!: number;
+    @Prop({default: 0}) public highlightBorderRadius!: number;
 
     @Watch('position')
     onPositionChanged(): void {
+      // console.log('size: ', poaitionthis.size);
       this.setupAnimation(this.animationDuration, this.position, this.size);
     }
 
     @Watch('size')
     onSizeChanged(): void {
+      // console.log('size: ', this.size);
       this.setupAnimation(this.animationDuration, this.position, this.size);
     }
 
     public setupAnimation(animationDuration, position?, size? ): void {
-      this.animate(animationDuration, position !== undefined ? position : this.position, size !== undefined ? size : this.size);
+      this.animateSize(animationDuration, position !== undefined ? position : this.position, size !== undefined ? size : this.size);
+      this.animatePosition(animationDuration, this.computedMask);
+      this.animateBorderRadius(animationDuration, this.highlightBorderRadius);
     }
 
-    get computedHighlightBox(): object {
-      const {
-        left,
-        top,
-        right,
-        bottom
-      } = this.points;
+    private gridLoaded(): void {
+      // @ts-ignore
+      const grid = this.$refs.grid.nativeView;
+      const gridWidth = grid.getActualSize().width;
 
-      if (this.wholePage) {
-        return {
-            clipPath: `polygon(0% 0%, 0% 100%, ${left}% 100%, ${left}% ${top}%, ${right}% ${top}%, ${right}% ${bottom}%, ${left}% ${bottom}%,${left}% 100%, 100% 100%, 100% 0%);`,
-            backgroundColor: this.overlayColor
-        };
-      } else {
-        return {
-          // remove clipPath if wholePage is taken up
-          clipPath: undefined,
-          backgroundColor: this.overlayColor
-        };
+      if((gridWidth > this.layout.width)) {
+        const mask: TooltipPosition = {...this.mask};
+        mask.left = 0;
+        mask.right = 0;
+        mask.middle = '*';
+
+        this.mask = mask;
       }
 
+      // if (this.currentStep.darkenWholePage && this.currentStep.darkenWholePage === true) {
+      //   const mask: TooltipPosition = {...this.mask};
+      //   mask.left = 'auto';
+      //   mask.right = 'auto';
+      //   mask.middle = '*';
+
+      //   this.mask = mask;
+      // }
+
+    }
+
+    get computedBorderWidth(): number {
+      let width = this.points.right - this.points.left;
+      let height = this.points.bottom - this.points.top;
+      
+      let max = width > height ? width : height;
+
+      return max * 10;
+
+    }
+
+    get computedMaskLocation(): Points {
+      let mask = {...this.maskLocation};
+      // console.log('These are the point values for location AFTER: right:', mask.right, 'left:', mask.left, 'bottom:', mask.bottom,  'top:', mask.top);
+      return mask;
+    }
+
+    get computedMask(): TooltipPosition {
+      return this.mask
+    }
+
+    get computedRadius(): number {
+      return this.radius.r;
     }
 
     // animate the highlight box in the overlay. Since the highlight box is based on a clip-path
     // we must calculate the location based on percentages
-    private animate(animationDuration, position, size): void {
-      const left = (Math.max((((position.x) / this.layout.width) * 100), 0));
-      const top = (Math.max((((position.y) / this.layout.height) * 100), 0));
-      const right = (Math.max((((position.x + size.x) / this.layout.width) * 100), 0));
-      const bottom = (Math.max(((((position.y) + size.y) / this.layout.height) * 100), 0));
+    private animateSize(animationDuration, position, size): void {
+      // const left = (Math.max((((position.x) / this.layout.width) * 100), 0));
+      // const top = (Math.max((((position.y) / this.layout.height) * 100), 0));
+      // const right = (Math.max((((position.x + size.x) / this.layout.width) * 100), 0));
+      // const bottom = (Math.max(((((position.y) + size.y) / this.layout.height) * 100), 0));
+      const left = ((position.x));
+      const top = ((position.y));
+      const right = ((position.x + size.x));
+      const bottom = ((position.y) + size.y);
+      // console.log('These are the point values:', right, left, bottom, top);
       
       const to = {
         left,
@@ -96,13 +163,66 @@
       }
     }
 
+    private animatePosition(animationDuration, mask): void {
+      // const left = (Math.max((((position.x) / this.layout.width) * 100), 0));
+      // const top = (Math.max((((position.y) / this.layout.height) * 100), 0));
+      // const right = (Math.max((((position.x + size.x) / this.layout.width) * 100), 0));
+      // const bottom = (Math.max(((((position.y) + size.y) / this.layout.height) * 100), 0));
+      const left = 0;
+      const top = (mask.top) - this.highlightedPadding;
+      const right = (mask.right) - this.highlightedPadding;
+      const bottom = 0;
+      
+      const to = {
+        left,
+        top,
+        right,
+        bottom
+      };
+
+      if(this.animated) {
+        new TWEEN.Tween(this.maskLocation)
+          .to(to, animationDuration)
+          .easing(TWEEN.Easing.Quadratic.Out)
+          .start();
+      } else {
+        new TWEEN.Tween(this.maskLocation)
+          .to(to, 1)
+          .start();
+      }
+    }
+
+    private animateBorderRadius(animationDuration, radius): void {
+      // const left = (Math.max((((position.x) / this.layout.width) * 100), 0));
+      // const top = (Math.max((((position.y) / this.layout.height) * 100), 0));
+      // const right = (Math.max((((position.x + size.x) / this.layout.width) * 100), 0));
+      // const bottom = (Math.max(((((position.y) + size.y) / this.layout.height) * 100), 0));
+      const r = radius;
+      const to = {
+        r
+      };
+
+      if(this.animated) {
+        new TWEEN.Tween(this.radius)
+          .to(to, animationDuration)
+          .easing(TWEEN.Easing.Quadratic.Out)
+          .start();
+      } else {
+        new TWEEN.Tween(this.maskLocation)
+          .to(to, 1)
+          .start();
+      }
+    }
+
     // absorb tap allows the mask to not be able to be clicked through on android
     private absorbTap() {
       // console.log('This tap was absorbed by the ViewMask');
     }
+
   }
 
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+
 </style>

@@ -13,6 +13,7 @@ export default class ViewMask extends Vue {
     backgroundColor: string;
     stepNumber: string;
     safeArea: Points;
+    numberFontFamilyStyle: string;
     onPositionChanged(): void;
     onSizeChanged(): void;
     setupAnimation(animationDuration: any, position?: any, size?: any): void;

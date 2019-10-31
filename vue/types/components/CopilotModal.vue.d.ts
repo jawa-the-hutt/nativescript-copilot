@@ -2,6 +2,7 @@ import { Vue } from 'vue-property-decorator';
 import { Step, Layout, ValueXY, ArrowPosition, TooltipPosition, Points } from '../utils/types';
 export default class CopilotModal extends Vue {
     private tooltip;
+    private mask;
     private arrow;
     private arrowClipPath;
     private animatedValues;
@@ -28,6 +29,8 @@ export default class CopilotModal extends Vue {
     toolTipBackgroundColor: string;
     toolTipBorderRadius: string;
     showNumber: boolean;
+    highlightBorderRadius: number;
+    highlightPadding: number;
     private onLoaded;
     private getDeviceInfoAndroid;
     private getDeviceInfoIOS;
@@ -44,6 +47,7 @@ export default class CopilotModal extends Vue {
     readonly computedPosition: ValueXY;
     readonly computedLayout: Layout;
     readonly computedTooltip: TooltipPosition;
+    readonly computedMask: TooltipPosition;
     readonly computedTooltipStyle: object;
     readonly computedArrow: ArrowPosition;
     readonly computedArrowClipPath: string;
@@ -52,4 +56,6 @@ export default class CopilotModal extends Vue {
     readonly computedNumberAccentColor: string;
     readonly computedNumberBackgroundColor: string;
     readonly computedLabels: object;
+    readonly computedHighlightBorderRadius: number;
+    readonly computedHighlightPadding: number;
 }

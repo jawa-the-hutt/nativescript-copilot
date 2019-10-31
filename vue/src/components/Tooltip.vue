@@ -98,7 +98,7 @@
 
     }
 
- 
+
     
 
     @Watch('currentStep')
@@ -110,7 +110,7 @@
           //@ts-ignore
           let stack = this.$refs.custom.nativeView;
           stack.removeChildren();
-          console.log('Building template');
+          // console.log('Building template');
           let xml = this.currentStep.itemTemplate;
           let component;
           // try to parse the itemTemplate string into a component, if fails, warn in console
@@ -119,9 +119,8 @@
             stack.addChild(component);
           } catch (e) {
             console.log('nativescript-copilot - error - invalid custom layout, unable to parse');
+            console.log(e.message);
           }
-        } else {
-          console.log('nativescript-copilot - error -  missing itemTemplate');
         }
       } else {
         //@ts-ignore
