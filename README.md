@@ -3,7 +3,7 @@
   Step-by-step walkthrough for your Nativescript app!
 </p>
 <p align="center">
-  <img src="./screenshots/vue-demo.gif" alt="Vue-Demo" />
+  <img src="https://media.giphy.com/media/KDtck6CgRgTpoY0ZKJ/giphy.gif" alt="Vue-Demo" />
 </p>
 
 #### Inspired by the awesome [React Native Copilot](https://github.com/mohebifar/react-native-copilot) plugin
