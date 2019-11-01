@@ -3,7 +3,7 @@
     <GridLayout row="1" col="1" :rows="`${circleSize}`" :columns="`${circleSize}`" borderRadius="50%" :backgroundColor="backgroundColor" horizontalAlignment="center" verticalAlignment="middle">
       <GridLayout :rows="`${circleSize - 4 }`" :columns="`${circleSize - 4}`" borderRadius="50%" :backgroundColor="accentColor" horizontalAlignment="center" verticalAlignment="middle">
         <StackLayout borderRadius="50%" :width="`${circleSize- 6}`" :height="`${circleSize - 6}`" horizontalAlignment="center" verticalAlignment="middle">
-          <Label :text="stepNumber" :color="backgroundColor" horizontalAlignment="center" verticalAlignment="middle" :fontSize="`${circleSize / 2.5}`" />
+          <Label :text="stepNumber" :color="backgroundColor" horizontalAlignment="center" verticalAlignment="middle" :fontSize="`${circleSize / 2.5}`" :fontFamily="numberFontFamilyStyle"/>
         </StackLayout>
       </GridLayout>
     </GridLayout>
@@ -39,6 +39,7 @@
     @Prop({default: 'white'}) public backgroundColor!: string;
     @Prop() public stepNumber!: string;
     @Prop() public safeArea!: Points;
+    @Prop({ default: 'Avenir-Light'}) public numberFontFamilyStyle!: string;  
 
     @Watch('position')
     onPositionChanged(): void {

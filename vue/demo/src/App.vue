@@ -9,7 +9,7 @@
           <StackLayout col="1" verticalAlignment="middle" horizontalAlignment="center">
             <Image ref="step2" src="~/assets/logo.png" height="50%" width="50%" borderWidth="0"/>
           </StackLayout> 
-          <StackLayout col="2" verticalAlignment="middle" horizontalAlignment="right">
+          <StackLayout col="2" verticalAlignment="middle" horizontalAlignment="right" marginRight="0">
             <Label ref="step3" text="Top Right" textWrap="true" marginRight="15" verticalAlignment="middle" horitzontalAlignment="right" color="white" borderWidth="0"/>
           </StackLayout> 
         </GridLayout>
@@ -43,8 +43,9 @@
         :labels="labels"
         :tooltipStyle="tooltipStyle"
         :overlayColor="overlayColor"
-        :backgroundColor="backgroundColor"
-        :accentColor="accentColor"
+        :toolTipBackgroundColor="backgroundColor"
+        :numberBackgroundColor="backgroundColor"
+        :numberAccentColor="accentColor"
         ref="copilot"
       />
     </Gridlayout>
@@ -55,6 +56,7 @@
   import { Component, Vue } from 'vue-property-decorator';
   import TestingPageTwo from './tesing-page-two.vue';
   import { Step } from '../../';
+  
 
   @Component({
   })
@@ -107,7 +109,7 @@
           // @ts-ignore
           target: this.$refs.step1.nativeView,
           animated: true,
-          isFirstStep: true
+          isFirstStep: true,
         },
         {
           name: 'Second',
@@ -115,7 +117,9 @@
           order: 2,
           // @ts-ignore
           target: this.$refs.step2.nativeView,
-          animated: true
+          animated: true,
+          highlightPadding: 0,
+          highlightBorderRadius: 40,
         },
         {
           name: 'Third',
@@ -123,7 +127,9 @@
           order: 3,
           // @ts-ignore
           target: this.$refs.step3.nativeView,
-          animated: true
+          animated: true,
+          highlightPadding: 5,
+          highlightBorderRadius: 40,
         },
         {
           name: 'Fourth',
@@ -132,11 +138,13 @@
           // @ts-ignore
           target: this.$refs.step4.nativeView,
           animated: true,
+          highlightPadding: 40,
+          highlightBorderRadius: 100,
 
         },
         {
           name: 'Fifth',
-          text: 'This has a veritcal offset of -5 which will push the step 5dp towards the top',
+          text: 'This has a veritcal offset of -5 which will push the step 5dp towards the top            ',
           order: 5,
           // @ts-ignore
           target: this.$refs.step5.nativeView,
@@ -167,9 +175,36 @@
           animated: true,
         },
         {
+          name: 'Fourth',
+          text: '',
+          order: 9,
+          // @ts-ignore
+          target: this.$refs.step4.nativeView,
+          animated: true,
+          isCustom: true,
+          itemTemplate: '<GridLayout columns="*,*"><Image col="0" src="~/assets/logo.png" /><Label col="1" textWrap="true" text="This is a custom template with other options" color="white" padding="5"/></GridLayout>',
+          customBackgroundColor: 'black',
+          customBorderRadius: '15',
+          numberBackgroundColor: 'white',
+          numberAccentColor: 'black',
+          customTooltipStyle:  {
+            fontFamily: 'Avenir-Bold',
+            tooltipFontSize: 12,
+            tooltipTextColor: 'white',
+            buttonFontSize: 12,
+            accentColor: 'white'
+          },
+          customLabels: {
+            skip: 'Stop',
+            previous: 'Before',
+            next: 'Continue',
+            finish: 'Done'
+          }
+        },
+        {
           name: 'Whole Page',
           text: 'This is darkening the whole page',
-          order: 8,
+          order: 10,
           // @ts-ignore
           target: this.$refs.wholePage.nativeView,
           animated: true,

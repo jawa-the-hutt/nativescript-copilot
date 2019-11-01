@@ -1,7 +1,10 @@
 import { Vue } from 'vue-property-decorator';
-import { Layout, ValueXY } from '../utils/types';
+import { Layout, ValueXY, Points, TooltipPosition } from '../utils/types';
 export default class ViewMask extends Vue {
     private points;
+    private clipPoints;
+    private maskLocation;
+    private radius;
     size: ValueXY;
     position: ValueXY;
     layout: Layout;
@@ -9,10 +12,22 @@ export default class ViewMask extends Vue {
     animationDuration: number;
     animated: boolean;
     overlayColor: string;
+    wholePage: boolean;
+    mask: TooltipPosition;
+    highlightPadding: number;
+    highlightBorderRadius: number;
     onPositionChanged(): void;
     onSizeChanged(): void;
     setupAnimation(animationDuration: any, position?: any, size?: any): void;
+    private gridLoaded;
+    readonly computedBorderWidth: number;
+    readonly computedMaskLocation: Points;
+    readonly computedMask: TooltipPosition;
     readonly computedHighlightBox: object;
-    private animate;
+    readonly computedRadius: number;
+    private animateSize;
+    private animateClipPath;
+    private animatePosition;
+    private animateBorderRadius;
     private absorbTap;
 }

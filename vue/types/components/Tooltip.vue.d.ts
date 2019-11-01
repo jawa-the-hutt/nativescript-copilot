@@ -13,10 +13,14 @@ export default class Tooltip extends Vue {
     arrowClipPath: string;
     arrow: ArrowPosition;
     backgroundColor: string;
+    toolTipBorderRadius: string;
     private gridLoaded;
+    onCurrentStepChange(): void;
     readonly computedTooltipStyle: object;
     readonly computedTooltip: TooltipPosition;
     readonly computedArrow: ArrowPosition;
     readonly computedArrowStyle: object;
+    readonly computedBackgroundColor: string;
+    readonly computedBorderRadius: string;
     readonly computedTopGridRows: string;
 }

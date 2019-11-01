@@ -3,7 +3,7 @@
   Step-by-step walkthrough for your Nativescript app!
 </p>
 <p align="center">
-  <img src="./screenshots/vue-demo.gif" alt="Vue-Demo" />
+  <img src="https://media.giphy.com/media/KDtck6CgRgTpoY0ZKJ/giphy.gif" alt="Vue-Demo" />
 </p>
 
 #### Inspired by the awesome [React Native Copilot](https://github.com/mohebifar/react-native-copilot) plugin
@@ -48,10 +48,12 @@ You can combine multiple `refs` to create a tour.  You will need to create an ob
         },
         {
           name: 'Second',
-          text: 'here is some text',
+          text: 'here is some text with a rounded highlighted zone and padding',
           order: 2,
           target: this.$refs.step2.nativeView,
-          animated: true
+          animated: true,
+          highlightBorderRadius: 10,
+          highlighPadding: 5,
         },
         {
           name: 'Third',
@@ -67,6 +69,40 @@ You can combine multiple `refs` to create a tour.  You will need to create an ob
           target: this.$refs.step4.nativeView,
           animated: false,
           verticalOffset: -5,
+        },
+        {
+          name: 'Fifth',
+          text: '',
+          order: 4,
+          target: this.$refs.step3.nativeView,
+          animated: false,
+          isCustom: true,
+          itemTemplate: '<Label text="This is a custom template!" color="green"/>',
+          customBackgroundColor: 'black',
+          customBorderRadius: '15',
+          numberAccentColor: 'white',
+          numberBackgroundColor: 'green',
+           customTooltipStyle:  {
+            fontFamily: 'Avenir-Bold',
+            tooltipFontSize: 12,
+            tooltipTextColor: 'white',
+            buttonFontSize: 12,
+            accentColor: 'white'
+          },
+          customLabels: {
+            skip: 'Stop',
+            previous: 'Before',
+            next: 'Continue',
+            finish: 'Done'
+          }
+        },
+        {
+          name: 'Sixth',
+          text: 'This will darken the whole page and center the tool tip',
+          order: 4,
+          target: this.$refs.step4.nativeView,
+          animated: false,
+          darkenWholePage: true,
           isLastStep: true
         }
       ]
@@ -74,18 +110,29 @@ You can combine multiple `refs` to create a tour.  You will need to create an ob
 
 There are several configuration items in a `Step` object:
 
-| Name           | Type          | Description    |
-| -------------- | --------------| --------------- |
-| name           | string        | Purely for decoration/organizational purposes   |
-| text           | string        | The descriptive text to display in the tooltip   |
-| order          | number        | which step this is in the page's tour   |
-| target         | string        | the specific component that you want the tour to stop at.  This must be in the format of `this.$refs.step1.nativeView` where `step1` is the name of the actual `ref`   |
-| animated       | boolean       | Default is true, but if you don't want a step to animate to the next step, then set this and it will jump to the next location without any animation   |
-| verticalOffset | number        | Use in case you need to vertically offset the area highlighted by the step.  This can be a positive or negative number   |
-| isFirstStep    | boolean       | Used to tell the plugin which step is first so that it will hide the `Previous` button   |
-| isLastStep     | boolean       | Used to tell the plugin which step is last so that it will hide the `Next` button and show the 'Finish' button    |
-| isLastStep     | boolean       | Used to tell the plugin which step is last so that it will hide the `Next` button and show the 'Finish' button    |
-| darkenWholePage| boolean       | Used to tell the plugin if a step has no highlighted value, to darken the whole screen, and center the text box vertically and horizontally    |
+| Name                  | Type          | Description    |
+| --------------        | --------------| --------------- |
+| name                  | string        | Purely for decoration/organizational purposes   |
+| text                  | string        | The descriptive text to display in the tooltip   |
+| order                 | number        | which step this is in the page's tour   |
+| target                | string        | the specific component that you want the tour to stop at.  This must be in the format of `this.$refs.step1.nativeView` where `step1` is the name of the actual `ref`   |
+| animated              | boolean       | Default is true, but if you don't want a step to animate to the next step, then set this and it will jump to the next location without any animation   |
+| verticalOffset        | number        | Use in case you need to vertically offset the area highlighted by the step.  This can be a positive or negative number   |
+| isFirstStep           | boolean       | Used to tell the plugin which step is first so that it will hide the `Previous` button   |
+| isLastStep            | boolean       | Used to tell the plugin which step is last so that it will hide the `Next` button and show the 'Finish' button    |
+| isLastStep            | boolean       | Used to tell the plugin which step is last so that it will hide the `Next` button and show the 'Finish' button    |
+| darkenWholePage       | boolean       | Used to tell the plugin if a step has no highlighted value, to darken the whole screen, and center the text box vertically and horizontally    |
+| showNumber            | boolean       | Use in the case of not wanting to show the step number on a specific step    |
+| numberBackgroundColor | string        | Used in the case of wanting a custom number background color on a specific step        |
+| numberAccentColor     | string        | Used in the case of wanting a custom number accent color on a specific step         |
+| customBackgroundColor | string        | Use in the case of wanting a custom background tool tip color on a specific step      |
+| customBorderRadius    | string        | Use in the case of wanting a custom border radius for the tool tip on a specific step |
+| highlightPadding      | number        | Use in the case of wanting a custom padding on the highlightedzone of the mask      |
+| highlightBorderRadius | number        | Use in the case of wanting a custom border radius on the highlightedzone of the mask on a specific step  *(**Warning**: when using border radius, with how this plugin functions, having too high of a border radius / too high of a border radius near the edge of the device will cause IOS UI to misfunction, it is suggested to descrease your border radius)* *(**Note**: using border radius will decrease your highlighted area, use padding to increase it again)*    |
+| isCustom              | boolean       | Use in the case of wanting a customized tool tip, along with the itemTemplate option    |
+| itemTemplate          | string        | Used if custom component is true on the step, pass in a string value of XML  ( events and dynamic props do not work )   |
+| customTooltipStyle    | object        | Used in the case of wanting a custom style for the tool tip on a specific step     |
+| customLabels          | object        | Used in the case of wanting a custom style for the tool tip on a specific step     |
 
 You will then pass the step config into the `Copilot` component as the `steps` prop.  In the example below, we are using a computed property to feed the `steps` prop:
 
@@ -103,14 +150,20 @@ You will then pass the step config into the `Copilot` component as the `steps` p
 ```
 
 There are several other props that can be passed into the `Copilot` component.  They are:
-| Name              | Type   | Default    | Description    |
-| ----------------- | -------| -----------| -----------|
-| animationDuration | string | 300        | Number of `ms` the animation will take to move to the next step |
-| labels            | object | { skip: 'Skip', next: 'Next', previous: 'Previous', finish: 'Finish' } | The names of the four buttons used in the toolsip to move between tour steps.  `Skip` will end the tour at any step while `Finish` will only end at the very last step. |
-| tooltipStyle      | object | { fontFamily: Avenir-Light, tooltipFontSize: 14, tooltipTextColor: 'black', buttonFontSize: 14, accentColor: 'green' }        | Used to control the overall apperance of the tooltip |
-| overlayColor      | string | rgb(0, 0, 0, 0.4)           | Used to control the overlay color           |
-| backgroundColor   | string | white      | Used to set the primary background color of the tooltip           |
-| accentColor       | string | green      | Used to set the primary accent color           |
+
+| Name             | Type          | Default       | Description    |
+| --------------   | --------------| --------------|--------------- |
+| animationDuration         | string | 300           | Number of `ms` the animation will take to move to the next step |
+| labels                    | object | { skip: 'Skip', next: 'Next', previous: 'Previous', finish: 'Finish' }            | The names of the four buttons used in the toolsip to move between tour steps.  `Skip` will end the tour at any step while `Finish` will only end at the very last step. |
+| tooltipStyle              | object | { fontFamily: Avenir-Light, tooltipFontSize: 14, tooltipTextColor: 'black', buttonFontSize: 14, accentColor: 'green' }  |  Used to control the overall apperance of the tooltip |
+| overlayColor              | string |  rgba(0, 0, 0, 0.4)            | Used to control the overlay color|
+| numberBackgroundColor     | string | white      | Used to set the default number background color           |
+| numberAccentColor         | string | green      | Used to set the default number accent color           |
+| toolTipBackgroundColor    | string | white      | Used to set the default tool tip background color |
+| toolTipBorderRadius       | string | '3'        | Used to set the default tool tip border radius    |
+| highlightBorderRadius     | number | 0          | Used to set the default highlight border radius on the mask *(**Warning**: when using border radius, with how this plugin functions, having too high of a border radius / too high of a border radius near the edge of the device will cause IOS UI to misfunction, it is suggested to descrease your border radius)* *(**Note**: using border radius will decrease your highlighted area, use padding to increase it again)*|
+| highlightPadding          | number | 5          | Used to set the default highlight padding on the mask|
+
 
 
 An initialization example of the above options (done in typescript):
@@ -132,26 +185,35 @@ private tooltipStyle: object = {
   accentColor: 'green'
 }
 private overlayColor: string = 'rgba(0, 0, 0, 0.4)';
-private accentColor: string = 'green';
-private backgroundColor: string = 'white';
+private numberAccentColor: string = 'green';
+private numberBackgroundColor: string = 'white';
+private toolTipBackgroundColor: string = 'white';
+private toolTipBorderRadius: string = '3';
+private highlightPadding: number = 5;
+private highlightBorderRadius: number = 10;
 ```
 
 There are several events emitted by the `Copilot` component:
 
 | Name           | Type          | Description    |
 | -------------- | --------------| --------------- |
-| stepChange     | object            | Emitted when a step progresses forward or backward, emits an object containing stepLeaving and stepArriving    |
-| copilotStopped | --            | Emitted when the copilot is stopped   |
-| notReady       | --            | Emitted when the copilot receives an invalid layout |
+| step-change    | object            | Emitted when a step progresses forward or backward, emits an object containing stepLeaving and stepArriving    |
+| stop           | --            | Emitted when the copilot is stopped   |
+| start          | --            | Emitted when the copilot is started   |
+| not-ready      | --            | Emitted when the copilot receives an invalid layout |
+| highlight-tap  | --            | Emitted when the copilot's highlightedzone is tapped |
+
 
 You will call the event from the `Copilot` component as the name of the chosen event.  In the example below, we are calling a function on the event:
 
 ```html
   <Copilot
     :steps="computedSteps"
-    @stepChange="stepChanged"
-    @copilotStopped="copilotStopped"
-    @notReady="copilotNotReady"
+    @step-change="stepChanged"
+    @stop="copilotStopped"
+    @not-ready="copilotNotReady"
+    @start="copilotStarted"
+    @highlight-tap="copilotHighlightTap"
     ref="copilot"
   />
 ```
