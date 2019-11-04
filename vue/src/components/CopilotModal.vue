@@ -540,7 +540,7 @@
 
     get computedHighlightBorderRadius(): number {
       // decided between the default or by step
-      if (this.computedCurrentStep && this.computedCurrentStep.highlightBorderRadius) {
+      if (this.computedCurrentStep && ((this.computedCurrentStep.highlightBorderRadius && this.computedCurrentStep.highlightBorderRadius !== undefined) || this.computedCurrentStep.highlightBorderRadius === 0) ) {
         return this.computedCurrentStep.highlightBorderRadius;
       } else {
         return this.highlightBorderRadius;

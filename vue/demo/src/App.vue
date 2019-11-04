@@ -129,7 +129,7 @@
           target: this.$refs.step3.nativeView,
           animated: true,
           highlightPadding: 5,
-          highlightBorderRadius: 40,
+          highlightBorderRadius: 0,
         },
         {
           name: 'Fourth',

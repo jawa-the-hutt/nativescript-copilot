@@ -22,9 +22,9 @@
       <StackLayout row="1" col="0" height="auto" width="auto" @tap="absorbTap()" :backgroundColor="overlayColor"/>
       <StackLayout row="0" col="1" height="auto" width="auto" @tap="absorbTap()" :backgroundColor="overlayColor"/>
       <StackLayout row="2" col="1" height="auto" width="auto" @tap="absorbTap()" :backgroundColor="overlayColor"/>
-      <StackLayout row="1" col="2" height="auto" width="auto" @tap="absorbTap()" :backgroundColor="overlayColor"/>
-      <StackLayout row="0" col="2" height="100%" width="100%" @tap="absorbTap()" :backgroundColor="overlayColor"/>
-      <StackLayout row="2" col="2" height="100%" width="100%" @tap="absorbTap()" :backgroundColor="overlayColor"/>
+      <StackLayout row="1" col="2" v-show="computedMaskLocation.right > 0" height="auto" width="auto" @tap="absorbTap()" :backgroundColor="overlayColor"/>
+      <StackLayout row="0" col="2" v-show="computedMaskLocation.right > 0" height="100%" width="100%" @tap="absorbTap()" :backgroundColor="overlayColor"/>
+      <StackLayout row="2" col="2" v-show="computedMaskLocation.right > 0" height="100%" width="100%" @tap="absorbTap()" :backgroundColor="overlayColor"/>
       <!-- End Darkened overlay -->
     </Gridlayout>
 </template>
