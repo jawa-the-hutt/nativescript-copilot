@@ -1,6 +1,6 @@
 import { Vue } from 'vue-property-decorator';
 import { Layout, ValueXY, Points } from '../utils/types';
-export default class ViewMask extends Vue {
+export default class StepNumber extends Vue {
     private points;
     private circleSize;
     size: ValueXY;

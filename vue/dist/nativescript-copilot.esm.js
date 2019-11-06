@@ -522,7 +522,7 @@ const OFFSET_WIDTH = 4;
 const ARROW_SIZE = 8;
 const ANDROID_STATUSBAR_OFFSET = 24;
 
-let ViewMask$2 = class ViewMask extends Vue {
+let StepNumber = class StepNumber extends Vue {
     constructor() {
         super(...arguments);
         this.points = {
@@ -587,49 +587,49 @@ let ViewMask$2 = class ViewMask extends Vue {
 };
 __decorate([
     Prop()
-], ViewMask$2.prototype, "size", void 0);
+], StepNumber.prototype, "size", void 0);
 __decorate([
     Prop()
-], ViewMask$2.prototype, "position", void 0);
+], StepNumber.prototype, "position", void 0);
 __decorate([
     Prop()
-], ViewMask$2.prototype, "layout", void 0);
+], StepNumber.prototype, "layout", void 0);
 __decorate([
     Prop()
-], ViewMask$2.prototype, "easing", void 0);
+], StepNumber.prototype, "easing", void 0);
 __decorate([
     Prop()
-], ViewMask$2.prototype, "animationDuration", void 0);
+], StepNumber.prototype, "animationDuration", void 0);
 __decorate([
     Prop({ default: true })
-], ViewMask$2.prototype, "animated", void 0);
+], StepNumber.prototype, "animated", void 0);
 __decorate([
     Prop({ default: 'green' })
-], ViewMask$2.prototype, "accentColor", void 0);
+], StepNumber.prototype, "accentColor", void 0);
 __decorate([
     Prop({ default: 'white' })
-], ViewMask$2.prototype, "backgroundColor", void 0);
+], StepNumber.prototype, "backgroundColor", void 0);
 __decorate([
     Prop()
-], ViewMask$2.prototype, "stepNumber", void 0);
+], StepNumber.prototype, "stepNumber", void 0);
 __decorate([
     Prop()
-], ViewMask$2.prototype, "safeArea", void 0);
+], StepNumber.prototype, "safeArea", void 0);
 __decorate([
     Prop({ default: 'Avenir-Light' })
-], ViewMask$2.prototype, "numberFontFamilyStyle", void 0);
+], StepNumber.prototype, "numberFontFamilyStyle", void 0);
 __decorate([
     Watch('position')
-], ViewMask$2.prototype, "onPositionChanged", null);
+], StepNumber.prototype, "onPositionChanged", null);
 __decorate([
     Watch('size')
-], ViewMask$2.prototype, "onSizeChanged", null);
-ViewMask$2 = __decorate([
+], StepNumber.prototype, "onSizeChanged", null);
+StepNumber = __decorate([
     Component({
-        name: 'view-mask'
+        name: 'step-number'
     })
-], ViewMask$2);
-var script$2 = ViewMask$2;
+], StepNumber);
+var script$2 = StepNumber;
 
 /* script */
 const __vue_script__$2 = script$2;
@@ -641,7 +641,7 @@ var __vue_staticRenderFns__$2 = [];
   /* style */
   const __vue_inject_styles__$2 = undefined;
   /* scoped */
-  const __vue_scope_id__$2 = "data-v-00c0f3c0";
+  const __vue_scope_id__$2 = "data-v-5b5f8a06";
   /* module identifier */
   const __vue_module_identifier__$2 = undefined;
   /* functional template */
@@ -652,7 +652,7 @@ var __vue_staticRenderFns__$2 = [];
   
 
   
-  var StepNumber = normalizeComponent_1(
+  var StepNumber$1 = normalizeComponent_1(
     { render: __vue_render__$2, staticRenderFns: __vue_staticRenderFns__$2 },
     __vue_inject_styles__$2,
     __vue_script__$2,
@@ -1088,7 +1088,7 @@ CopilotModal = __decorate([
         components: {
             ViewMask: ViewMask$1,
             Tooltip: Tooltip$1,
-            StepNumber
+            StepNumber: StepNumber$1
         }
     })
 ], CopilotModal);

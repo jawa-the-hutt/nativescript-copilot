@@ -17,9 +17,9 @@
   import { STEP_NUMBER_RADIUS, STEP_NUMBER_DIAMETER } from '../utils/constants';
 
   @Component({
-    name: 'view-mask'
+    name: 'step-number'
   })
-  export default class ViewMask extends Vue {
+  export default class StepNumber extends Vue {
 
     private points: Points = {
       left: 0,
